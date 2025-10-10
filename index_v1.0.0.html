@@ -1,0 +1,431 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4IiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCBtZWV0Ij4KICA8aW1hZ2UgaHJlZj0iZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFEQUFBQUF3Q0FZQUFBQlhBdm1IQUFBQUNYQklXWE1BQUFzVEFBQUxFd0VBbXB3WUFBQU1JVWxFUVZSNG5PMlphWENWMVJuSE0yMzk0a3o3UWUySGpwVEt2bWtEV1NBSmhFQUMyUk5JeUFxMWJtQWRsMVpHSEFQVVV0QXFkbHdRVU1TNjRCb0VFd0tFblpBUWlDQkVzdDc5M3R4OTM1ZHMrdUhmZWM1NzMvZHVDVGVNMWc4ZHpzd3pjL011NS96KzV6enYrejdubjRTRTIrMy9zRDFkdDczam1ib2RDSStuNjdaZit0a0FXbHRiZjNYcE85bmpyZCtLT2xxKzZSMDhjN25yaDFOdDEzdU90MXg1c2FucDhxL2ozUjhOejBlOCs2NWVsZi9tVXFmMHhmWk9hVy9iTmRFUExkLzBCYzVkN3I1OHVyMXpBekZOQ0w3dXhYOTllN3psU3FEdG1oZ3RWM3B4OW5JWFRsM3NSUE9GcXpoNnRnTU5KeTlLbys5QlplVXZ2Y1cxNmI2aTZpMytvcW9HWmZtRHNKYlV3RjFZQlhkQkpheEZWWkN2V2dmdnl2SUd6NHF5TGQ0VlpXbll0dTBYMGYxYzZwVEoyanVsYUxzbVFzdVZQcHpyNk1hWjl1OXdxdTA2dm13OEczaCs2NDZyTjRVbmxUZURienpWanNQTkxRZjU2NGRXVmYvZVgxeXowMWRTWS9BWFY4TmZWQTFmWVJWOGhaWHdGVlRDbDE4QlgvNGFlUFBXd0p0YlRnTGdYVmtHejRyVjhPU3MwcnV6VjczcXlDcWJ4UGZYZmwxeWNDejQ1cGFyT0hidUczeDJ1RGx3MDVXZ3RMazUvSVhHL2ZzNzcvQlZWdjdXWDFxejMxZGNPK292cVFIQis0cXE0Y2l2Z0RXdkhKYmNNcGhXcklaeFJTa01PYVV3WnBmQ25GMEtTMDRwYk5tbGNPY3dBZkJrbDhLMXJHVFV2YXhrbnkrcitKN096czQ3V3E3ME5ZNEYzM1RtRWhwT3R1SFFpZGIxNDY4QTVYd2NlUCtxdFdzREpiVk9mMGt0Q041ZFZBVnIvaHFZcWg2R1plY3VPSnJQd05jdnhwRGRnWkdoWVl3TURtSElab2UzVndUN3NWTXd2L3dHREt2WHdwUlZCUHV5RXJoWkZNTzF0TWpoWEZKVVF5Sk9YL3l1Y1N6NHc4MFg4TlhScyszakNqaC9wY2MvRnZ6N254NzJ2Vm4zNmxSLzZkci9CRW9KdkJhZTRtcFlDOWJBdUhFejdCZmE0ZmY2RVJnY3d1RFFNSWFIUnpBeU1vcVIwZTh4TXZJOWhrZEdNVFE4d3M0RkFrUHdlbnl3blcrRDdvbU5NR1lXd0xHMGlBVEF0YlFRcmlVRjcrM2Z0bTN5Z1lOSHZiSHc1L0JsNDJuZnVBTE9YTzRham9ILzVMRDMrZWUyb3JmNmtRQVBieStxaFBHaEoyQnJ2UVNQMXdldkx3Q2ZmNURCRFE0T1l5Z29Zbmg0TkJnajdCZ0o5QWNHNGZNSDRQWDUyYjJXYzYzUXJua1E1aVg1Y0dVeUFlZ3NxUEJ0ZW00TFB2cWkwUmNCZitRMFBqOThjbkJjQWZTcWpFNmJYZHQyVHU2dGZzUkg4TDZTV2xnTEsyRGM4Vzg0VEZhNDNGNjRQU1RBejZBSWpxMUNVTVRRRUFkT00wL0hTS0RmUHdpZkx3Q1AxOC91cFQ0Y0pndTBkZitFSVQwWGpzWDVjR2Jrb1N1dlBMQjc2MHRUaUVHQS8vb2tQajEwckd0Y0FmU2VqOG41WU5ydzhJWTk3OFB1ZE1QaDhnZ0NDQ1pDUkdBb0tJUUwrczNnbzJiZjdmSEM2ZmJBNFhMRDduQkI5KzZIMEM5YUFVZDZIcHhwdVhBc1dybVBHTDVvUE4zSXdSL0h4L1ZOVzhjVlFCK3BobE1YWlY4M3Q5Uno4TFhyK0xRaGVQMytqMkd6TzlsZ0RxY2J6aGdSbEVvQk5zc0VHeDZVWWlINDBPdzdYUjdXbDgzaGd0WHVoUGJOZDZGZm1FUHdjQ3hjQVdkS1RqV3hmUExWc2ZvRDlVZWxIelExeGYyUXN1WmQvZURkZ2RJYU81L3ordTJ2d1dKenNFRm9NRzRWM0d3R1haN0lsZUNGQ09FajhQSGg3UTRYbXhpcnpRR0wxWTZCNS80T1kwbzJIS2s1c0tVc2R4cVRzKzVKdU5WRzczbitiV1A0ODE5ZzFPcGh0dHJIRU9IaFJBZ3J3UWtKaWVGK00zQ1dObUh3TGpkRUVwa3crOVEzaldGVTY2QXVySUlsWlRuc0tkbXdKUzkvNTViZ0I4dldUZUkvVXZTcTFKMXVnZEZzZzhsaWg4WHFZRE1WbmtwTVJEQ2QrTlVZSzlqNU1QZzMzOTZMbFFVbDZCZExCWGlUeFFhajJRcE4wMGxvazdKZ1QxNE9XMUxXcUN0NThlU0p6MzV4elU3K0k2Vjc1Z1VZVEJiV0tYVXVyRUtZQ0xZU3dXZENFQklWdEVyOGVicVdoMzlqMXg0aGRjd1dPNHdXR3d4bUsvUW1DNVRyTnNDOElBczJpc1NscjA0SW5vb3NYMG0xbnNvRCtzSnFUNXlGM21nWlY0U1FUbUZDMkxNUmhPVm1tNXR4bHU5T04vYTg4NTRBYjJId2tiTlBZK21OWmd3MEhJY21jUWxzODVmQytzZE1BeFdOY1FWUVZjblhOb2FLaDZEUjZLRXptSU1pckpFaXJJN1FNeEVoaEJNVEVjRnp1NlBnelRUek1mQVdOaWFOclZ4U0FHdGlKZ21BT1RGellWd0JYRW5NRldhYUhhOUJvemRDYXpCQlo0d1ZzZVVmMjFGWjh5ZTh1LzhEcUFZMFRFaElEQ2VJUmZEWVdQQW15OWp3V3IySmphMTRkak1NRHl5QmxlTCt4WFh4ODcrd3FwRktZcW9xVmZVTlVPdU1ZNGpnb25oMUJRT2lLQ21yd0s3ZDcwQXFWNFhTS3l6ZTNydVBnMzlyVDlTczIyTGhEUnk4V21lQS9JUFBvSjJYUWZDd3pNczRIRCtGQ2l2N3FaNm5rbGgxc1FNRFdrT2tDQ0dkTERqZjJvN0huL3FySUlLaXNMUWNPMTkvQzMwaXFRREt3Ny8rMXU2d0dlZkJyZXlCcFp5UGhxZXhGV2Rib1o2YkJ1dThESmpucHZmR1Q2SENTaWR0UnFpZVYvVkxNS0RSanlNaUpPVE0rVFk4czNGVGhKRE1yR3pNbVhjLzVzNjdIeG1aeTRMd0hEUVBidUJubllmWFI4S3JOSG9vdXZ1Z21yTUlscm5wc014SnM4ZGZnZnpLVWRwSjBXWkVxVkJEcGRHeGpqZ1JCazZFM2pTbWtMWkxIZGhVdHhXNWhhV1lObjBHSnQ4M2hjWGNlUSt3VjZNQUhRMXVNSEh3dWtoNHBWb0hoVndKeGV5RkJBL0xuRVVqOFFYa3JSbWxiU0R0cEJUeUFTalZXdFpSaEFoK05jS0VjTThISjZiajZqWE1tVHRQRUpDY2tzcU9jMkdPQmRjVHVCRnFMY0hyUS9BRFdpaGtTaWhtcFRJQjV0a0w0d3Z3NVpjN2FROUwyMEI1YnovWFNZU0k4WVVJWWd4bUhQcTZFUXRtVFVmU3JPazQxSEJFT001RDgrQ2FzRm1uZEEySGx3OW9JTHZSQytXc1ZKaG5MNEo1MXNMNEtlVEpMZStuRFRqdFlXVXRGeUZYYVZoSDFDRW5JbFlJZXo2Q1lnUkJlaFBrR3hhemlBQVdvTVBBdFNGd0FWNmxnVXlsZ2VUa2VhaG1waEk4VEROUzR6L0VudHp5Um5JUGFBTXUvYVFlTXFXYWRVUWRjaUxHRVNLSTRRUlJ5RGRrc09EL1p1Y1ljT1NNcXpRaGNBRmVxWVpVcVlaNDM0ZFF6MHlCbVVUTVNJbi9HbVcremNveTVoNG90cjRFcVdLQWRVUWRScTRHSjRSUExTWkdFTVNKa3EvUFlNSFBNai9UNGRES0tQQndlSWxpQU9Jbk5rSTNJNFhnWVp5ZS9FSmNBV1E2a1c5RDFvZTJwQVppcVlKMVJFSms0VUtDS3hJdEpyUTZPc2pXWjdEZy93Ni9odTVSakFOT1l6RjRpUnpTbE9Vd3pVaUJhWG9LVEZOU1VpZFV6SG15Vit2SXR5SHJRM0xvQ01SeUZTUVU0d2poVnlVaTFGckkxcWV6aURrWERxMktCYWV4YU16K1R3OUNOUzJKZzUrV3JFVkNRb3liTjJZang0eE1KL0p0bEk4K0JaRk1DVEZGbEJBK3RjS2ZrL0NRUFpiT0l1WjRFRm8yRGppTng4WXNxWVZ1V2pMQnd6UjF3U3NKRTIxazl3VWRNK2JiaUE0ZFFiOVVNYVlRUVl4Q0hTbUl3QjVMWnhGeExBZ2NnaDZJQWFleCtnN1VRemsxaVlPZmtqU2ltNVI0NzRRRnNGVllWcktQSERNeW5WU3IxNkt2dTQ5MXpBdmh4S2hDWXNJRUNjS0NBcUtQODhCaUNsa2tPSU8vMFFOSlJoNzBsRDVUazJDNGIvNmVoRnR0bnR6Y3UxeExpK3prbUpIcEpIMTJNL29rY2hhQ0VDazNzTEF5UVVGOFNCOUxZeUVlQjFnVUJ0MHZVWEQ5aTJUb2UvaEpxS2N1WVBER0tmTWR4cG5KdDc2cHAwWmVKYlA3TWd1WjZTUjY1UTMwaW1Yb0ZjdERZaVJCZ0hCUlFXR1NSOU5ZTU5qZzhmQnIrM2xvaVp6MXlmcmUvQktVVTNqNEJUQk1tVitaOEdNYWVaVms5NUZqUnFhVGVOdE85SWhJaEN4R0RCY0V4Y0dKOTcvTWdnTU53Y1pBaTJXc3o1N3RyekY0WXhEZWVOLzh2UWsvdHRFKzFKbVJkNFRzUG5MTXlIUVNQLzA4dWp1NzBTT1NjZ05IQ09KRXhVYmtOZng5UFNJcHVxOTNvZStoSjZQaG01R1ZOYkgveXNScnh1VGlPeDFwdVNlQ2RoOHpuWlI1RmVqNS9CQzYrNlZjTURIUkVZTGtnNjRUN3VtWG9PdWp6eUZKend2TCtRVXcvbUgrY2VQdmt1OU0rQ2tia3BQdklLK1M3RDV5ek1oMEl0OUdXdlV3ZWc3VW82dEhoQzRDNnBjd3NPamd6M1gxU2REVjNZL3VEeitEcUtpYXZTcjV0dzJmTmovWnpJL1Z5S3UwcDJiYnlURWowNGw4RzdJK0ZJdnpJSHB5RTdyM3ZvK3VwaE80MGZFdGJuVDFja0cvajV4QTE5dnZvVy9EM3lCTlhzYStzRHJoSTBXdnlnVzJILzNBVHJSNVUzUHVKcnZQbnBRMXdrd244bTBTTTVsN1FCdHcyc1BTTnBCMlVyUVpvWHFlU21LcUtxa3dFMnFiYWR4SGl0N3p1a2x6NzByNHVac2pNZnRlY3N5c2lVdDA1TnNFclErMkFRL3VZWU03S2JZWjRVdGlEbjVxa283S2cxdit3djR2R2hWWlpEcVJiMFBXQjdrSGx0bUxuSmJaYWFQbVdZdEd6VE5UbmFZWktUMVV6MU5KVEZYbGhBdXoyKzEydTkwU2J0YitDL1ZLKzNWSGZnOEtBQUFBQUVsRlRrU3VRbUNDIiB4PSIwIiB5PSIwIiB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIC8+Cjwvc3ZnPg==">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/css/lightpick.min.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@100..800&display=swap" />
+  <style>.switch{-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.switch{cursor:pointer;display:inline-flex;align-items:center;position:relative;margin-right:0.5em}.switch+.switch:last-child{margin-right:0}.switch input[type=checkbox]{position:absolute;left:0;opacity:0;outline:none;z-index:-1}.switch input[type=checkbox]+.check{display:flex;align-items:center;flex-shrink:0;width:2.75em;height:1.575em;padding:.2em;background:#b5b5b5;border-radius:4px;transition:background 150ms ease-out,box-shadow 150ms ease-out}.switch input[type=checkbox]+.check.is-white-passive,.switch input[type=checkbox]+.check:hover{background:#fff}.switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}.switch input[type=checkbox]+.check.is-black-passive,.switch input[type=checkbox]+.check:hover{background:#0a0a0a}.switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}.switch input[type=checkbox]+.check.is-light-passive,.switch input[type=checkbox]+.check:hover{background:#f5f5f5}.switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}.switch input[type=checkbox]+.check.is-dark-passive,.switch input[type=checkbox]+.check:hover{background:#363636}.switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}.switch input[type=checkbox]+.check.is-primary-passive,.switch input[type=checkbox]+.check:hover{background:#00d1b2}.switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}.switch input[type=checkbox]+.check.is-link-passive,.switch input[type=checkbox]+.check:hover{background:#485fc7}.switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}.switch input[type=checkbox]+.check.is-info-passive,.switch input[type=checkbox]+.check:hover{background:#3e8ed0}.switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}.switch input[type=checkbox]+.check.is-success-passive,.switch input[type=checkbox]+.check:hover{background:#48c78e}.switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}.switch input[type=checkbox]+.check.is-warning-passive,.switch input[type=checkbox]+.check:hover{background:#ffe08a}.switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}.switch input[type=checkbox]+.check.is-danger-passive,.switch input[type=checkbox]+.check:hover{background:#f14668}.switch input[type=checkbox]+.check.input[type=checkbox]+.switch input[type=checkbox]+.check.check{background:'pink'}.switch input[type=checkbox]+.check:before{content:"";display:block;border-radius:4px;width:1.175em;height:1.175em;background:#f5f5f5;transition:transform 150ms ease-out;will-change:transform;transform-origin:left}.switch input[type=checkbox]+.check.is-elastic:before{transform:scaleX(1.5);border-radius:4px}.switch input[type=checkbox]:checked+.check{background:#00d1b2}.switch input[type=checkbox]:checked+.check.is-white{background:#fff}.switch input[type=checkbox]:checked+.check.is-black{background:#0a0a0a}.switch input[type=checkbox]:checked+.check.is-light{background:#f5f5f5}.switch input[type=checkbox]:checked+.check.is-dark{background:#363636}.switch input[type=checkbox]:checked+.check.is-primary{background:#00d1b2}.switch input[type=checkbox]:checked+.check.is-link{background:#485fc7}.switch input[type=checkbox]:checked+.check.is-info{background:#3e8ed0}.switch input[type=checkbox]:checked+.check.is-success{background:#48c78e}.switch input[type=checkbox]:checked+.check.is-warning{background:#ffe08a}.switch input[type=checkbox]:checked+.check.is-danger{background:#f14668}.switch input[type=checkbox]:checked+.check:before{transform:translate3d(100%, 0, 0)}.switch input[type=checkbox]:checked+.check.is-elastic:before{transform:translate3d(50%, 0, 0) scaleX(1.5)}.switch input[type=checkbox]:focus,.switch input[type=checkbox]:active{outline:none}.switch .control-label{padding-left:0.5em}.switch:hover input[type=checkbox]+.check{background:rgba(181,181,181,0.9)}.switch:hover input[type=checkbox]+.check.is-white-passive{background:rgba(255,255,255,0.9)}.switch:hover input[type=checkbox]+.check.is-black-passive{background:rgba(10,10,10,0.9)}.switch:hover input[type=checkbox]+.check.is-light-passive{background:rgba(245,245,245,0.9)}.switch:hover input[type=checkbox]+.check.is-dark-passive{background:rgba(54,54,54,0.9)}.switch:hover input[type=checkbox]+.check.is-primary-passive{background:rgba(0,209,178,0.9)}.switch:hover input[type=checkbox]+.check.is-link-passive{background:rgba(72,95,199,0.9)}.switch:hover input[type=checkbox]+.check.is-info-passive{background:rgba(62,142,208,0.9)}.switch:hover input[type=checkbox]+.check.is-success-passive{background:rgba(72,199,142,0.9)}.switch:hover input[type=checkbox]+.check.is-warning-passive{background:rgba(255,224,138,0.9)}.switch:hover input[type=checkbox]+.check.is-danger-passive{background:rgba(241,70,104,0.9)}.switch:hover input[type=checkbox]:checked+.check{background:rgba(0,209,178,0.9)}.switch:hover input[type=checkbox]:checked+.check.is-white{background:rgba(255,255,255,0.9)}.switch:hover input[type=checkbox]:checked+.check.is-black{background:rgba(10,10,10,0.9)}.switch:hover input[type=checkbox]:checked+.check.is-light{background:rgba(245,245,245,0.9)}.switch:hover input[type=checkbox]:checked+.check.is-dark{background:rgba(54,54,54,0.9)}.switch:hover input[type=checkbox]:checked+.check.is-primary{background:rgba(0,209,178,0.9)}.switch:hover input[type=checkbox]:checked+.check.is-link{background:rgba(72,95,199,0.9)}.switch:hover input[type=checkbox]:checked+.check.is-info{background:rgba(62,142,208,0.9)}.switch:hover input[type=checkbox]:checked+.check.is-success{background:rgba(72,199,142,0.9)}.switch:hover input[type=checkbox]:checked+.check.is-warning{background:rgba(255,224,138,0.9)}.switch:hover input[type=checkbox]:checked+.check.is-danger{background:rgba(241,70,104,0.9)}.switch.is-rounded input[type=checkbox]+.check{border-radius:9999px}.switch.is-rounded input[type=checkbox]+.check:before{border-radius:9999px}.switch.is-rounded input[type=checkbox].is-elastic:before{transform:scaleX(1.5);border-radius:9999px}.switch.is-outlined input[type=checkbox]+.check{background:transparent;border:0.1rem solid #b5b5b5;padding:.1em}.switch.is-outlined input[type=checkbox]+.check.is-white-passive{border:0.1rem solid rgba(255,255,255,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-white-passive:before{background:#fff}.switch.is-outlined input[type=checkbox]+.check.is-white-passive:hover{border-color:rgba(255,255,255,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-black-passive{border:0.1rem solid rgba(10,10,10,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-black-passive:before{background:#0a0a0a}.switch.is-outlined input[type=checkbox]+.check.is-black-passive:hover{border-color:rgba(10,10,10,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-light-passive{border:0.1rem solid rgba(245,245,245,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-light-passive:before{background:#f5f5f5}.switch.is-outlined input[type=checkbox]+.check.is-light-passive:hover{border-color:rgba(245,245,245,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-dark-passive{border:0.1rem solid rgba(54,54,54,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-dark-passive:before{background:#363636}.switch.is-outlined input[type=checkbox]+.check.is-dark-passive:hover{border-color:rgba(54,54,54,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-primary-passive{border:0.1rem solid rgba(0,209,178,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-primary-passive:before{background:#00d1b2}.switch.is-outlined input[type=checkbox]+.check.is-primary-passive:hover{border-color:rgba(0,209,178,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-link-passive{border:0.1rem solid rgba(72,95,199,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-link-passive:before{background:#485fc7}.switch.is-outlined input[type=checkbox]+.check.is-link-passive:hover{border-color:rgba(72,95,199,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-info-passive{border:0.1rem solid rgba(62,142,208,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-info-passive:before{background:#3e8ed0}.switch.is-outlined input[type=checkbox]+.check.is-info-passive:hover{border-color:rgba(62,142,208,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-success-passive{border:0.1rem solid rgba(72,199,142,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-success-passive:before{background:#48c78e}.switch.is-outlined input[type=checkbox]+.check.is-success-passive:hover{border-color:rgba(72,199,142,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-warning-passive{border:0.1rem solid rgba(255,224,138,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-warning-passive:before{background:#ffe08a}.switch.is-outlined input[type=checkbox]+.check.is-warning-passive:hover{border-color:rgba(255,224,138,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-danger-passive{border:0.1rem solid rgba(241,70,104,0.9)}.switch.is-outlined input[type=checkbox]+.check.is-danger-passive:before{background:#f14668}.switch.is-outlined input[type=checkbox]+.check.is-danger-passive:hover{border-color:rgba(241,70,104,0.9)}.switch.is-outlined input[type=checkbox]+.check:before{background:#b5b5b5}.switch.is-outlined input[type=checkbox]:checked+.check{border-color:#00d1b2}.switch.is-outlined input[type=checkbox]:checked+.check.is-white{background:transparent;border-color:#fff}.switch.is-outlined input[type=checkbox]:checked+.check.is-white:before{background:#fff}.switch.is-outlined input[type=checkbox]:checked+.check.is-black{background:transparent;border-color:#0a0a0a}.switch.is-outlined input[type=checkbox]:checked+.check.is-black:before{background:#0a0a0a}.switch.is-outlined input[type=checkbox]:checked+.check.is-light{background:transparent;border-color:#f5f5f5}.switch.is-outlined input[type=checkbox]:checked+.check.is-light:before{background:#f5f5f5}.switch.is-outlined input[type=checkbox]:checked+.check.is-dark{background:transparent;border-color:#363636}.switch.is-outlined input[type=checkbox]:checked+.check.is-dark:before{background:#363636}.switch.is-outlined input[type=checkbox]:checked+.check.is-primary{background:transparent;border-color:#00d1b2}.switch.is-outlined input[type=checkbox]:checked+.check.is-primary:before{background:#00d1b2}.switch.is-outlined input[type=checkbox]:checked+.check.is-link{background:transparent;border-color:#485fc7}.switch.is-outlined input[type=checkbox]:checked+.check.is-link:before{background:#485fc7}.switch.is-outlined input[type=checkbox]:checked+.check.is-info{background:transparent;border-color:#3e8ed0}.switch.is-outlined input[type=checkbox]:checked+.check.is-info:before{background:#3e8ed0}.switch.is-outlined input[type=checkbox]:checked+.check.is-success{background:transparent;border-color:#48c78e}.switch.is-outlined input[type=checkbox]:checked+.check.is-success:before{background:#48c78e}.switch.is-outlined input[type=checkbox]:checked+.check.is-warning{background:transparent;border-color:#ffe08a}.switch.is-outlined input[type=checkbox]:checked+.check.is-warning:before{background:#ffe08a}.switch.is-outlined input[type=checkbox]:checked+.check.is-danger{background:transparent;border-color:#f14668}.switch.is-outlined input[type=checkbox]:checked+.check.is-danger:before{background:#f14668}.switch.is-outlined input[type=checkbox]:checked+.check:before{background:#00d1b2}.switch.is-outlined:hover input[type=checkbox]+.check{background:transparent;border-color:rgba(181,181,181,0.9)}.switch.is-outlined:hover input[type=checkbox]:checked+.check{background:transparent;border-color:rgba(0,209,178,0.9)}.switch.is-outlined:hover input[type=checkbox]:checked+.check.is-white{border-color:rgba(255,255,255,0.9)}.switch.is-outlined:hover input[type=checkbox]:checked+.check.is-black{border-color:rgba(10,10,10,0.9)}.switch.is-outlined:hover input[type=checkbox]:checked+.check.is-light{border-color:rgba(245,245,245,0.9)}.switch.is-outlined:hover input[type=checkbox]:checked+.check.is-dark{border-color:rgba(54,54,54,0.9)}.switch.is-outlined:hover input[type=checkbox]:checked+.check.is-primary{border-color:rgba(0,209,178,0.9)}.switch.is-outlined:hover input[type=checkbox]:checked+.check.is-link{border-color:rgba(72,95,199,0.9)}.switch.is-outlined:hover input[type=checkbox]:checked+.check.is-info{border-color:rgba(62,142,208,0.9)}.switch.is-outlined:hover input[type=checkbox]:checked+.check.is-success{border-color:rgba(72,199,142,0.9)}.switch.is-outlined:hover input[type=checkbox]:checked+.check.is-warning{border-color:rgba(255,224,138,0.9)}.switch.is-outlined:hover input[type=checkbox]:checked+.check.is-danger{border-color:rgba(241,70,104,0.9)}.switch.is-small{border-radius:2px;font-size:.75rem}.switch.is-medium{font-size:1.25rem}.switch.is-large{font-size:1.5rem}.switch[disabled]{opacity:0.5;cursor:not-allowed;color:#7a7a7a}
+.h-100 { height: 100%; }
+.w-100 { width: 100%; }
+.clock {
+    font-family: "Martian Mono", monospace;
+    font-weight: 400;
+    font-size: 6rem;
+    width: 100%;
+}
+</style>
+  <title>TimeEventAnnouncer</title>
+</head>
+
+<body>
+<main class="pt-6">
+  <div class="notification is-danger is-light is-position-fixed pr-6 is-display-none"
+       style="top: 4rem; right: 1rem; z-index: 100;" id="voice_not_ready_notification"
+  >
+    <button></button>
+    <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+    アナウンス音声が保存されていません。
+  </div>
+
+  <nav class="navbar is-fixed-top has-background-black-ter">
+    <div class="navbar-brand is-flex is-justify-content-space-between is-align-items-center w-100 px-3">
+      <p class="title is-size-4 pt-3 mb-1">
+        TimeEventAnnouncer
+        <span class="pl-1 is-size-6 has-text-weight-semibold is-italic">v1.0.0</span>
+      </p>
+      <div class="field">
+        <label class="switch is-rounded">
+          <input type="checkbox" value="1" id="announce_enabled_switch">
+          <span class="check is-info"></span>
+          <span class="control-label">On</span>
+        </label>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container is-max-tablet">
+    <section class="pb-6 mt-6">
+      <div class="title clock is-flex is-justify-content-center" id="clock">00:00:00</div>
+    </section>
+    <section class="pt-4">
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">設定</p>
+        </header>
+        <div class="card-content">
+          <!-- region # アナウンス音声 -->
+          <div class="field">
+            <label class="label">アナウンス音声</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="アナウンス音声を入力してください。" id="announce_text" />
+            </div>
+          </div>
+          <!-- endregion -->
+
+          <!-- region # 期間 -->
+          <div class="field">
+            <label class="label">期間</label>
+            <div class="field is-horizontal">
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="text" id="date_from" readonly />
+                  </div>
+                </div>
+                <div class="field">
+                  <p class="title is-5 is-flex is-justify-content-center is-align-items-center h-100">～</p>
+                </div>
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="text" id="date_till" readonly />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- endregion -->
+
+          <!-- region # 時刻-->
+          <div class="field">
+            <label class="label">アナウンス時刻</label>
+            <div class="control">
+              <input class="input" type="time" id="announce_time" />
+            </div>
+          </div>
+          <!-- endregion -->
+
+          <!-- region # 保存ボタン -->
+          <div class="field is-grouped is-grouped-centered pt-3">
+            <div class="control">
+              <button type="button" class="button is-link" id="save_btn">
+                <i class="fa-solid fa-save mr-2"></i>
+                保存
+              </button>
+            </div>
+          </div>
+          <!-- endregion -->
+        </div>
+      </div>
+    </section>
+
+    <!-- region # テスト再生ボタン、音量 -->
+    <section class="is-position-fixed has-background-grey-darker px-4 py-3"
+             style="bottom: 1rem; right: 1rem; width: 30%; border-radius: 0.5rem; z-index: 100;"
+    >
+      <div class="field is-horizontal">
+        <div class="field-label is-normal">
+          <label class="label ">音量</label>
+        </div>
+        <div class="field-body">
+          <div class="field has-addons">
+            <div class="control is-expanded px-3"
+                 style="border: thin solid cornflowerblue; border-radius: 0.3rem 0 0 0.3rem;"
+            >
+                <input type="range" min="0" max="1" step="0.01" value="0.5" id="announce_volume"
+                       class="is-flex is-justify-content-center is-align-items-center h-100 w-100"
+                />
+            </div>
+            <div class="control">
+              <button class="button is-link h-100" id="test_btn">
+                <i class="fas fa-play"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- endregion -->
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/lightpick.min.js"></script>
+<script>const API_KEY = 'E272w1052-M68-5';
+const LOCAL_STORAGE_KEY = 'time_event_announcer';
+
+const DB_NAME = 'time_event_announcer_db';
+const STORE_NAME = 'wav_store';
+const CACHE_KEY = 'announce_wav';
+const API_BASE_URL = `https://deprecatedapis.tts.quest/v2/voicevox/audio/?key=${API_KEY}&speaker=1&text={ANNOUNCE_TEXT}`;
+
+const audio_ctx = new AudioContext();
+const gain_node = audio_ctx.createGain();
+let audio_buffer = null;
+let last_fired_datetime = "";
+
+const default_data = {
+  is_announce_enabled: false,
+  announce_text: "",
+  announce_volume: 0.5,
+  date_from: "",
+  date_till: "",
+  announce_time: "",
+};
+
+let dom_elems = {}
+
+const parseJstDate = (date_str => {
+  const [y, m, d] = date_str.split(/[\/\-]/).map(Number);
+  return new Date(y, m-1, d, 0, 0, 0, 0);
+});
+
+/** IndexedDBを開きます。 */
+const openIndexedDB = () => {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = () => {
+      req.result.createObjectStore(STORE_NAME);
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+};
+
+/** IndexedDBへデータを追加します。 */
+const putToIndexedDB = async (key, value) => {
+  const db = await openIndexedDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    tx.objectStore(STORE_NAME).put(value, key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+};
+
+/** IndexedDBからデータを取得します。 */
+const getFromIndexedDB = async (key) => {
+  const db = await openIndexedDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const req = tx.objectStore(STORE_NAME).get(key);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = () => reject(req.error);
+  });
+};
+
+/** 保存ボタンの状態を切り替えます。 */
+const toggleSaveButton = (is_loading) => {
+  if(is_loading) {
+    dom_elems.save_btn.disabled = true;
+    dom_elems.save_icon.classList.remove('fa-save');
+    dom_elems.save_icon.classList.add('fa-spinner', 'fa-spin');
+  } else {
+    dom_elems.save_icon.classList.remove('fa-spinner', 'fa-spin');
+    dom_elems.save_icon.classList.add('fa-save');
+    dom_elems.save_btn.disabled = false;
+  }
+};
+
+const toggleVoiceNotReady = (is_voice_not_ready) => {
+  if(is_voice_not_ready) {
+    dom_elems.voice_not_ready_notification.classList.remove('is-display-none');
+    dom_elems.test_btn.disabled = true;
+  } else {
+    dom_elems.voice_not_ready_notification.classList.add('is-display-none');
+    dom_elems.test_btn.disabled = false;
+  }
+};
+
+/** Local Storageへデータを取得します。 */
+const loadData = () => {
+  const raw_data = localStorage.getItem(LOCAL_STORAGE_KEY) ?? '';
+  if(raw_data === '') return default_data;
+  return JSON.parse(raw_data);
+}
+
+/** 設定DOMへデータをセットします。 */
+const setDomElemsValues = (data) => {
+  dom_elems.announce_enabled_switch.checked = data.is_announce_enabled;
+  dom_elems.announce_text.value = data.announce_text;
+  dom_elems.announce_volume.value = data.announce_volume;
+  dom_elems.date_from.value = data.date_from;
+  dom_elems.date_till.value = data.date_till;
+  dom_elems.announce_time.value = data.announce_time;
+};
+
+/** IndexedDBから音声をロードします */
+const loadVoiceSource = async () => {
+  try {
+    const blob = await getFromIndexedDB(CACHE_KEY);
+    if (!blob) return null;
+
+    const array_buffer = await blob.arrayBuffer();
+    audio_buffer = await audio_ctx.decodeAudioData(array_buffer);
+  } catch(e) {
+    console.error(e);
+    audio_buffer = null;
+  }
+};
+
+/** アナウンス音声を再生します。 */
+const playAnnounceVoice = async (is_test) => {
+  if(!audio_buffer) {
+    if(is_test) alert("アナウンス音声がありません。")
+    return;
+  }
+
+  if(typeof audio_ctx?.resume === 'function') await audio_ctx.resume();
+
+  const data = loadData();
+  gain_node.gain.value = Number.isFinite(data.announce_volume) ? data.announce_volume : 0.5;
+
+  const source = audio_ctx.createBufferSource();
+  source.buffer = audio_buffer;
+  source.connect(gain_node);
+  source.onended = () => {
+    try { source.disconnect(); } catch(_) { }
+  };
+  source.start(0);
+};
+
+/** Local Storageへデータを保存します。アラート音声をAPIで取得してIndexed DBへ保存します。 */
+const fetchAndSaveData = async () => {
+  toggleSaveButton(true);
+  const prev_data = loadData();
+  const curr_data = {
+    is_announce_enabled: dom_elems.announce_enabled_switch.checked,
+    announce_text: dom_elems.announce_text.value,
+    announce_volume: parseFloat(dom_elems.announce_volume.value),
+    date_from: dom_elems.date_from.value,
+    date_till: dom_elems.date_till.value,
+    announce_time: dom_elems.announce_time.value,
+  };
+
+  const is_changed_text = prev_data.announce_text.trim() !== dom_elems.announce_text.value.trim();
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(curr_data));
+
+  if(!is_changed_text) {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    toggleSaveButton(false);
+    return;
+  }
+
+  const api_url = API_BASE_URL.replace('{ANNOUNCE_TEXT}', curr_data.announce_text);
+  try {
+    const res = await fetch(api_url);
+    if(!res.ok) throw new Error('アナウンス音声の取得に失敗しました。');
+
+    const blob = await res.blob();
+    await putToIndexedDB(CACHE_KEY, blob);
+    await loadVoiceSource();
+    toggleVoiceNotReady(false);
+  } catch(e) {
+    alert(e.message);
+  } finally {
+    toggleSaveButton(false);
+  }
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  dom_elems = {
+    announce_enabled_switch: document.querySelector('#announce_enabled_switch'),
+    announce_text: document.querySelector('#announce_text'),
+    announce_volume: document.querySelector('#announce_volume'),
+    date_from: document.querySelector('#date_from'),
+    date_till: document.querySelector('#date_till'),
+    announce_time: document.querySelector('#announce_time'),
+    save_btn: document.querySelector('#save_btn'),
+    clock: document.querySelector('#clock'),
+    voice_not_ready_notification: document.querySelector('#voice_not_ready_notification'),
+    test_btn: document.querySelector('#test_btn'),
+  }
+  dom_elems.save_icon = dom_elems.save_btn.querySelector("i");
+
+  // 期間のDatePickerをセットします。
+  new Lightpick({
+    field: document.querySelector('#date_from'),
+    secondField: document.querySelector('#date_till'),
+    singleDate: false,
+    format: 'YYYY/MM/DD',
+    onSelect: (from, till) => {
+    }
+  });
+
+  // アナウンス時刻のDatetimePickerをセットします。
+  flatpickr('#announce_time', {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: 'H:i:S',
+    time_24hr: true,
+    enableSeconds: true,
+    minuteIncrement: 1,
+    secondIncrement: 1,
+  });
+
+  dom_elems.announce_enabled_switch.addEventListener('change', () => {
+    const data = loadData();
+    data.is_announce_enabled = dom_elems.announce_enabled_switch.checked;
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+  });
+
+  dom_elems.announce_volume.addEventListener('change', () => {
+    const data = loadData();
+    data.announce_volume = dom_elems.announce_volume.value;
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+  });
+
+  // 保存ボタンのクリックイベントをセットします。
+  dom_elems.save_btn.addEventListener('click', async () => {
+    await fetchAndSaveData()
+  });
+
+  // Local Storageから設定を取得してDOMへセットします。
+  const data = loadData();
+  setDomElemsValues(data);
+
+  // IndexedDBから音声をロードします。
+  await loadVoiceSource();
+  try {
+    gain_node.connect(audio_ctx.destination);
+  } catch (_) {}
+
+  dom_elems.test_btn.addEventListener('click', () => {
+    playAnnounceVoice(true);
+  });
+
+  toggleVoiceNotReady(!audio_buffer);
+  // toggleVoiceNotReady(true);
+});
+
+/** アナウンス時刻になったらアナウンス音声を再生します。 */
+setInterval(() => {
+  const now = new Date();
+  dom_elems.clock.textContent = now.toLocaleTimeString();
+
+  const is_announce_enabled = dom_elems.announce_enabled_switch.checked;
+  if(!is_announce_enabled) return;
+
+  const date_from = parseJstDate(dom_elems.date_from.value);
+  const date_till = new Date(parseJstDate(dom_elems.date_till.value).getTime() + 24* 60 * 60 * 1000 - 1);
+  if(now < date_from || date_till < now) return;
+
+  const announce_time = dom_elems.announce_time.value;
+  const m = announce_time.match(/^(\d{2}):(\d{2}):(\d{2})$/)
+  if(!m) return;
+
+  const [_, hh, mm, ss] = m.map(Number);
+  const is_same_second = now.getHours() === hh
+      && now.getMinutes() === mm
+      && now.getSeconds() === ss;
+
+  if(!is_same_second) return;
+  if(last_fired_datetime === now.toLocaleString()) return;
+
+  last_fired_datetime = now.toLocaleString();
+  playAnnounceVoice(false).then(r => {});
+}, 1000);
+</script>
+<script>
+</script>
+</body>
+</html>

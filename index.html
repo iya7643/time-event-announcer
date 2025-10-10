@@ -4,96 +4,145 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/css/lightpick.min.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/css/lightpick.min.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@100..800&display=swap" />
+  <link rel="stylesheet" href="app.css" />
   <title>TimeEventAnnouncer</title>
 </head>
 
 <body>
 <main class="pt-6">
+  <div class="notification is-danger is-light is-position-fixed pr-6 is-display-none"
+       style="top: 4rem; right: 1rem; z-index: 100;" id="voice_not_ready_notification"
+  >
+    <button></button>
+    <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+    アナウンス音声が保存されていません。
+  </div>
 
-</main>
-<div class="container is-max-tablet">
-  <section>
-    <div class="card">
-      <header class="card-header">
-        <p class="card-header-title">設定</p>
-      </header>
-      <div class="card-content">
-        <!-- region #アラート音声 -->
-        <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">アラーム音声</label>
-          </div>
-          <div class="field-body">
-            <div class="field">
-              <div class="control is-expanded">
-                <input class="input" type="text" placeholder="アラート音声を入力してください。" />
-              </div>
+  <nav class="navbar is-fixed-top has-background-black-ter">
+    <div class="navbar-brand is-flex is-justify-content-space-between is-align-items-center w-100 px-3">
+      <p class="title is-size-4 pt-3 mb-1">
+        TimeEventAnnouncer
+        <span class="pl-1 is-size-6 has-text-weight-semibold is-italic">v{VERSION_NO}</span>
+      </p>
+      <div class="field">
+        <label class="switch is-rounded">
+          <input type="checkbox" value="1" id="announce_enabled_switch">
+          <span class="check is-info"></span>
+          <span class="control-label">On</span>
+        </label>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container is-max-tablet">
+    <section class="pb-6 mt-6">
+      <div class="title clock is-flex is-justify-content-center" id="clock">00:00:00</div>
+    </section>
+    <section class="pt-4">
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">設定</p>
+        </header>
+        <div class="card-content">
+          <!-- region # アナウンス音声 -->
+          <div class="field">
+            <label class="label">アナウンス音声</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="アナウンス音声を入力してください。" id="announce_text" />
             </div>
           </div>
-        </div>
-        <!-- endregion -->
+          <!-- endregion -->
 
-        <!-- region #期間 -->
-        <div class="field is-horizontal">
-          <div class="field-label is-normal">
+          <!-- region # 期間 -->
+          <div class="field">
             <label class="label">期間</label>
-          </div>
-          <div class="field-body">
-            <div class="field">
-              <div class="control is-expanded">
-                <input class="input" type="text" id="date_from" readonly />
+            <div class="field is-horizontal">
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="text" id="date_from" readonly />
+                  </div>
+                </div>
+                <div class="field">
+                  <p class="title is-5 is-flex is-justify-content-center is-align-items-center h-100">～</p>
+                </div>
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="text" id="date_till" readonly />
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="field">
-              <p class="title is-5 is-flex is-justify-content-center is-align-items-center" style="height: 100%;">～</p>
-            </div>
-            <div class="field">
-              <div class="control is-expanded">
-                <input class="input" type="text" id="date_till" readonly />
-              </div>
-            </div>
           </div>
-        </div>
-        <!-- endregion -->
+          <!-- endregion -->
 
-        <!-- region #時刻-->
-        <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">時刻</label>
-          </div>
-          <div class="field-body">
-            <div class="field">
-              <div class="control">
-                <input class="input" type="time" id="time_announce" />
-              </div>
+          <!-- region # 時刻-->
+          <div class="field">
+            <label class="label">アナウンス時刻</label>
+            <div class="control">
+              <input class="input" type="time" id="announce_time" />
             </div>
           </div>
-        </div>
-        <!-- endregion -->
+          <!-- endregion -->
 
-        <div class="field is-grouped is-grouped-centered">
-          <div class="control">
-            <button type="button" class="button is-link">
-              保存
-            </button>
+          <!-- region # 保存ボタン -->
+          <div class="field is-grouped is-grouped-centered pt-3">
+            <div class="control">
+              <button type="button" class="button is-link" id="save_btn">
+                <i class="fa-solid fa-save mr-2"></i>
+                保存
+              </button>
+            </div>
+          </div>
+          <!-- endregion -->
+        </div>
+      </div>
+    </section>
+
+    <!-- region # テスト再生ボタン、音量 -->
+    <section class="is-position-fixed has-background-grey-darker px-4 py-3"
+             style="bottom: 1rem; right: 1rem; width: 30%; border-radius: 0.5rem; z-index: 100;"
+    >
+      <div class="field is-horizontal">
+        <div class="field-label is-normal">
+          <label class="label ">音量</label>
+        </div>
+        <div class="field-body">
+          <div class="field has-addons">
+            <div class="control is-expanded px-3"
+                 style="border: thin solid cornflowerblue; border-radius: 0.3rem 0 0 0.3rem;"
+            >
+                <input type="range" min="0" max="1" step="0.01" value="0.5" id="announce_volume"
+                       class="is-flex is-justify-content-center is-align-items-center h-100 w-100"
+                />
+            </div>
+            <div class="control">
+              <button class="button is-link h-100" id="test_btn">
+                <i class="fas fa-play"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-
-<!--  <button id="btn-download">download & save</button>-->
-<!--  <button id="btn-play">play</button>-->
-</div>
+    </section>
+    <!-- endregion -->
+  </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/lightpick.min.js"></script>
 <script src="app.js"></script>
-
+<script>
+</script>
 </body>
 </html>
