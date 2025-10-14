@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-const version = "1.0.0";
+const version = "1.1.0";
 
 const html = fs.readFileSync('index.html', 'utf8');
 const js = fs.readFileSync('app.js', 'utf8');
@@ -27,6 +27,6 @@ bundled = bundled.replace(
 
 bundled = bundled.replace('{VERSION_NO}', version);
 
-const output_name = `index_v${version}.html`;
+const output_name = `TimeEventAnnouncer_v${version}.html`;
 fs.writeFileSync(output_name, bundled);
 console.log(`✅ ${output_name} を生成した`);

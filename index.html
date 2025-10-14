@@ -1,14 +1,14 @@
 <!DOCTYPE HTML>
 
-<html>
+<html lang="ja">
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/css/lightpick.min.css" />
+<!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />-->
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -87,9 +87,88 @@
 
           <!-- region # 時刻-->
           <div class="field">
-            <label class="label">アナウンス時刻</label>
-            <div class="control">
-              <input class="input" type="time" id="announce_time" />
+            <label class="label">時刻</label>
+            <div class="grid">
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
+              <div class="cell">
+                <div class="control">
+                  <input class="input announce_time" type="time" step="1" />
+                </div>
+              </div>
             </div>
           </div>
           <!-- endregion -->
@@ -110,7 +189,7 @@
 
     <!-- region # テスト再生ボタン、音量 -->
     <section class="is-position-fixed has-background-grey-darker px-4 py-3"
-             style="bottom: 1rem; right: 1rem; width: 30%; border-radius: 0.5rem; z-index: 100;"
+             style="bottom: 1rem; right: 1rem; width: 40%; border-radius: 0.5rem; z-index: 100;"
     >
       <div class="field is-horizontal">
         <div class="field-label is-normal">
@@ -119,7 +198,7 @@
         <div class="field-body">
           <div class="field has-addons">
             <div class="control is-expanded px-3"
-                 style="border: thin solid cornflowerblue; border-radius: 0.3rem 0 0 0.3rem;"
+                 style="border: thin solid slategray; border-radius: 0.3rem 0 0 0.3rem;"
             >
                 <input type="range" min="0" max="1" step="0.01" value="0.5" id="announce_volume"
                        class="is-flex is-justify-content-center is-align-items-center h-100 w-100"
@@ -139,10 +218,8 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/lightpick.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>-->
 <script src="app.js"></script>
-<script>
-</script>
 </body>
 </html>
