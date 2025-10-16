@@ -1,10 +1,18 @@
-const API_KEY = 'E272w1052-M68-5';
-const LOCAL_STORAGE_KEY = 'time_event_announcer';
+let config = {
+  api_key: "",
+  api_url: "",
+  local_storage_key: "",
+  db_name: "",
+  store_name: "",
+  cache_key: "",
+};
 
-const DB_NAME = 'time_event_announcer_db';
-const STORE_NAME = 'wav_store';
-const CACHE_KEY = 'announce_wav';
-const API_BASE_URL = `https://deprecatedapis.tts.quest/v2/voicevox/audio/?key=${API_KEY}&speaker=1&text={ANNOUNCE_TEXT}`;
+let config_ready = (async () => {
+  const res = await fetch('./config.json', { cache: 'no-cache' });
+  const json = await res.json();
+  Object.assign(config, json);
+})();
+
 
 const audio_ctx = new AudioContext();
 const gain_node = audio_ctx.createGain();
@@ -30,9 +38,9 @@ const parseJstDate = (date_str => {
 /** IndexedDBを開きます。 */
 const openIndexedDB = () => {
   return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
+    const req = indexedDB.open(config.db_name, 1);
     req.onupgradeneeded = () => {
-      req.result.createObjectStore(STORE_NAME);
+      req.result.createObjectStore(config.store_name);
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
@@ -43,8 +51,8 @@ const openIndexedDB = () => {
 const putToIndexedDB = async (key, value) => {
   const db = await openIndexedDB();
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite');
-    tx.objectStore(STORE_NAME).put(value, key);
+    const tx = db.transaction(config.store_name, 'readwrite');
+    tx.objectStore(config.store_name).put(value, key);
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
   });
@@ -54,8 +62,8 @@ const putToIndexedDB = async (key, value) => {
 const getFromIndexedDB = async (key) => {
   const db = await openIndexedDB();
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly');
-    const req = tx.objectStore(STORE_NAME).get(key);
+    const tx = db.transaction(config.store_name, 'readonly');
+    const req = tx.objectStore(config.store_name).get(key);
     req.onsuccess = () => resolve(req.result || null);
     req.onerror = () => reject(req.error);
   });
@@ -86,7 +94,7 @@ const toggleVoiceNotReady = (is_voice_not_ready) => {
 
 /** Local Storageへデータを取得します。 */
 const loadData = () => {
-  const raw_data = localStorage.getItem(LOCAL_STORAGE_KEY) ?? '';
+  const raw_data = localStorage.getItem(config.local_storage_key) ?? '';
   if(raw_data === '') return default_data;
   return JSON.parse(raw_data);
 }
@@ -94,10 +102,10 @@ const loadData = () => {
 /** 設定DOMへデータをセットします。 */
 const setDomElemsValues = (data) => {
   dom_elems.announce_enabled_switch.checked = data.is_announce_enabled;
-  dom_elems.announce_text.value = data.announce_text;
-  dom_elems.announce_volume.value = data.announce_volume;
-  dom_elems.date_from.value = data.date_from;
-  dom_elems.date_till.value = data.date_till;
+  dom_elems.announce_text.value = data.announce_text ?? "";
+  dom_elems.announce_volume.value = Number.isFinite(data.announce_volume) ? data.announce_volume : 0.5; ;
+  dom_elems.date_from.value = data.date_from ?? "";
+  dom_elems.date_till.value = data.date_till ?? "";
 
   data.announce_times.forEach((value, index) => {
     dom_elems.announce_times[index].value = value;
@@ -107,7 +115,7 @@ const setDomElemsValues = (data) => {
 /** IndexedDBから音声をロードします */
 const loadVoiceSource = async () => {
   try {
-    const blob = await getFromIndexedDB(CACHE_KEY);
+    const blob = await getFromIndexedDB(config.cache_key);
     if (!blob) return null;
 
     const array_buffer = await blob.arrayBuffer();
@@ -153,23 +161,28 @@ const fetchAndSaveData = async () => {
   };
 
   const is_changed_text = prev_data.announce_text.trim() !== dom_elems.announce_text.value.trim();
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(curr_data));
 
   if(!is_changed_text) {
     await new Promise(resolve => setTimeout(resolve, 500));
+    localStorage.setItem(config.local_storage_key, JSON.stringify(curr_data));
     toggleSaveButton(false);
     return;
   }
 
-  const api_url = API_BASE_URL.replace('{ANNOUNCE_TEXT}', curr_data.announce_text);
   try {
-    const res = await fetch(api_url);
+    const params = new URLSearchParams({
+      key: config.api_key,
+      speaker: 1,
+      text: curr_data.announce_text,
+    });
+    const res = await fetch(`${config.api_url}?${params.toString()}`);
     if(!res.ok) throw new Error('アナウンス音声の取得に失敗しました。');
 
     const blob = await res.blob();
-    await putToIndexedDB(CACHE_KEY, blob);
+    await putToIndexedDB(config.cache_key, blob);
     await loadVoiceSource();
     toggleVoiceNotReady(false);
+    localStorage.setItem(config.local_storage_key, JSON.stringify(curr_data));
   } catch(e) {
     alert(e.message);
   } finally {
@@ -178,9 +191,12 @@ const fetchAndSaveData = async () => {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
+  await config_ready;
+
   dom_elems = {
     announce_enabled_switch: document.querySelector('#announce_enabled_switch'),
     announce_text: document.querySelector('#announce_text'),
+    api_point: document.querySelector('#api_point'),
     announce_volume: document.querySelector('#announce_volume'),
     date_from: document.querySelector('#date_from'),
     date_till: document.querySelector('#date_till'),
@@ -191,6 +207,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     test_btn: document.querySelector('#test_btn'),
   }
   dom_elems.save_icon = dom_elems.save_btn.querySelector("i");
+
+  // 残りAPIポイント
+  try {
+    const res = await fetch(`https://deprecatedapis.tts.quest/v2/api/?key=${config.api_key}`);
+    if(res.ok) {
+      const data = await res.json();
+      dom_elems.api_point.textContent = data.points.toLocaleString();
+    }
+  } catch(e) {}
 
   // 期間のDatePickerをセットします。
   new Lightpick({
@@ -216,13 +241,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   dom_elems.announce_enabled_switch.addEventListener('change', () => {
     const data = loadData();
     data.is_announce_enabled = dom_elems.announce_enabled_switch.checked;
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem(config.local_storage_key, JSON.stringify(data));
   });
 
   dom_elems.announce_volume.addEventListener('change', () => {
     const data = loadData();
-    data.announce_volume = dom_elems.announce_volume.value;
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+    data.announce_volume = parseFloat(dom_elems.announce_volume.value);
+    localStorage.setItem(config.local_storage_key, JSON.stringify(data));
   });
 
   // 保存ボタンのクリックイベントをセットします。
