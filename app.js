@@ -17,7 +17,7 @@ const default_data = {
   announce_volume: 0.5,
   date_from: "",
   date_till: "",
-  announce_time: "",
+  announce_times: [],
 };
 
 let dom_elems = {}
@@ -98,7 +98,10 @@ const setDomElemsValues = (data) => {
   dom_elems.announce_volume.value = data.announce_volume;
   dom_elems.date_from.value = data.date_from;
   dom_elems.date_till.value = data.date_till;
-  dom_elems.announce_time.value = data.announce_time;
+
+  data.announce_times.forEach((value, index) => {
+    dom_elems.announce_times[index].value = value;
+  });
 };
 
 /** IndexedDBから音声をロードします */
@@ -146,7 +149,7 @@ const fetchAndSaveData = async () => {
     announce_volume: parseFloat(dom_elems.announce_volume.value),
     date_from: dom_elems.date_from.value,
     date_till: dom_elems.date_till.value,
-    announce_time: dom_elems.announce_time.value,
+    announce_times: Array.from(dom_elems.announce_times).map(el => el.value),
   };
 
   const is_changed_text = prev_data.announce_text.trim() !== dom_elems.announce_text.value.trim();
@@ -181,7 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     announce_volume: document.querySelector('#announce_volume'),
     date_from: document.querySelector('#date_from'),
     date_till: document.querySelector('#date_till'),
-    announce_time: document.querySelector('#announce_time'),
+    announce_times: document.querySelectorAll('.announce_time'),
     save_btn: document.querySelector('#save_btn'),
     clock: document.querySelector('#clock'),
     voice_not_ready_notification: document.querySelector('#voice_not_ready_notification'),
@@ -200,15 +203,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // アナウンス時刻のDatetimePickerをセットします。
-  flatpickr('#announce_time', {
-    enableTime: true,
-    noCalendar: true,
-    dateFormat: 'H:i:S',
-    time_24hr: true,
-    enableSeconds: true,
-    minuteIncrement: 1,
-    secondIncrement: 1,
-  });
+  // flatpickr('.announce_time', {
+  //   enableTime: true,
+  //   noCalendar: true,
+  //   dateFormat: 'H:i:S',
+  //   time_24hr: true,
+  //   enableSeconds: true,
+  //   minuteIncrement: 1,
+  //   secondIncrement: 1,
+  // });
 
   dom_elems.announce_enabled_switch.addEventListener('change', () => {
     const data = loadData();
@@ -246,8 +249,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /** アナウンス時刻になったらアナウンス音声を再生します。 */
-setInterval(() => {
+setInterval(async () => {
   const now = new Date();
+
+  // NOTE: WorldTimeAPI: ローカルPCの時刻と同じくらいずれる。
+  // const res = await fetch("https://worldtimeapi.org/api/timezone/Asia/Tokyo");
+  // const data = await res.json();
+  // const now = new Date(data.datetime);
+
+  // NOTE: TimeAPI: ローカルPCの時刻と同じくらいずれる。
+  // const res = await fetch("https://timeapi.io/api/Time/current/zone?timeZone=UTC");
+  // const data = await res.json();
+  // const now = new Date(data.dateTime);
+
   dom_elems.clock.textContent = now.toLocaleTimeString();
 
   const is_announce_enabled = dom_elems.announce_enabled_switch.checked;
@@ -257,16 +271,16 @@ setInterval(() => {
   const date_till = new Date(parseJstDate(dom_elems.date_till.value).getTime() + 24* 60 * 60 * 1000 - 1);
   if(now < date_from || date_till < now) return;
 
-  const announce_time = dom_elems.announce_time.value;
-  const m = announce_time.match(/^(\d{2}):(\d{2}):(\d{2})$/)
-  if(!m) return;
+  const announce_times = Array.from(dom_elems.announce_times).map(el => el.value)
+  const should_fire = announce_times.some(t => {
+    const m = t.match(/^(\d{2}):(\d{2}):(\d{2})$/)
+    if(!m) return false;
 
-  const [_, hh, mm, ss] = m.map(Number);
-  const is_same_second = now.getHours() === hh
-      && now.getMinutes() === mm
-      && now.getSeconds() === ss;
+    const [_, hh, mm, ss] = m.map(Number);
+    return now.getHours() === hh && now.getMinutes() === mm && now.getSeconds() === ss;
+  });
 
-  if(!is_same_second) return;
+  if(!should_fire) return;
   if(last_fired_datetime === now.toLocaleString()) return;
 
   last_fired_datetime = now.toLocaleString();
