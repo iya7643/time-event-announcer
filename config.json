@@ -1,8 +1,0 @@
-{
-  "api_key": "E272w1052-M68-5",
-  "local_storage_key": "time_event_announcer",
-  "db_name": "time_event_announcer_db",
-  "store_name": "wav_store",
-  "cache_key": "announce_wav",
-  "api_url": "https://deprecatedapis.tts.quest/v2/voicevox/audio"
-}
