@@ -1,9 +1,10 @@
 import { get, writable } from 'svelte/store';
 import { format } from 'date-fns';
-import { audioContextState, beep, getAudioContextState, playVoice } from '$lib/audio';
-import { announceTimestamps, isAnnounceEnabled } from '$lib/stores';
+import { isAudioEnabled, playAudio, playBeep } from '$lib/audio';
+import { announceTimestamps, announceVolume, isAnnounceEnabled, isTextToSpeech } from '$lib/stores';
 import { DAYS, LOCAL_STORAGE_KEY } from '$lib/constants';
 import { type AppData, defaultAppData } from '$lib/types';
+import { browser } from '$app/environment';
 
 /** 本日日付 */
 export let today = writable<string>("2025/01/01(Wed)");
@@ -55,33 +56,35 @@ const startPreciseTimer = () => {
  * 時刻の表示を更新して、アナウンス音声やカウントダウン音を鳴らします。
  */
 const updateClock = () => {
+	if (!browser) return;
+
 	const now = new Date();
 	today.set(`${format(now, 'yyyy/MM/dd')} (${DAYS[now.getDay()]})`);
 	nowTime.set(format(now, 'HH:mm:ss'));
 
-	const nowMs = now.getTime();
-	{
-		const state = getAudioContextState();
-		audioContextState.set(state);
-		if (state === 'suspended') return;
-	}
-
 	// トグルスイッチがOFFの場合、何もしません。
 	if (!get(isAnnounceEnabled)) return;
+
+	// 自動再生の許可がない場合、何もしません。
+	if (!get(isAudioEnabled)) return;
 
 	const appData = JSON.parse(
 		localStorage.getItem(LOCAL_STORAGE_KEY) ?? JSON.stringify(defaultAppData)
 	) as AppData;
 
+	// appDataが未設定の場合、何もしません。
 	if (!appData.announceText || !appData.dateFrom || !appData.dateTill) return;
 	if (appData.announceTimes.every(s => s === '')) return;
 
+	// 期間外の場合、何もしません。
+	const nowMs = now.getTime();
 	{
 		const till = appData.dateTill + 24 * 60 * 60 * 1000 - 1;
 		if (nowMs < appData.dateFrom || till < nowMs) return;
 	}
 
 	const targetTimestamps = get(announceTimestamps);
+	const volume = get(announceVolume);
 	// const formattedNow = format(now, 'HH:mm:ss.SSS');
 	{
 		const shouldFire = targetTimestamps.some((ts) => {
@@ -90,7 +93,7 @@ const updateClock = () => {
 		});
 		if (shouldFire) {
 			// console.log(`${formattedNow}: アナウンス音声再生`);
-			playVoice(false).then(() => {});
+			get(isTextToSpeech) ? playAudio() : playBeep(523, 0.6, volume);
 			return;
 		}
 	}
@@ -101,7 +104,7 @@ const updateClock = () => {
 		});
 		if (shouldBeep) {
 			// console.log(`${formattedNow}: ビープ音再生`);
-			beep().then(() => {});
+			void playBeep(880, 0.15, volume/2);
 			return;
 		}
 	}

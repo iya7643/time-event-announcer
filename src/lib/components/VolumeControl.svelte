@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { announceVolume } from '$lib/stores';
-	import { isAudioReady, playVoice } from '$lib/audio';
+	import { isAudioReady, playAudio } from '$lib/audio';
 	import { updateAppData } from '$lib/localStorageHelper';
 </script>
 
@@ -31,7 +31,7 @@
 				</div>
 				<div class="control">
 					<button class="button is-link h-100" disabled={!$isAudioReady} aria-label="test playback"
-									on:click={() => playVoice(true)}
+									on:click={() => playAudio()}
 					>
 						<i class="fas fa-play"></i>
 					</button>

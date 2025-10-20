@@ -1,7 +1,10 @@
+import  type * as ToneNS from 'tone';
+
 export type AppData = {
 	isAnnounceEnabled: boolean;
-	announceVolume: number;
+	isTextToSpeech: boolean;
 	announceText: string;
+	announceVolume: number;
 	dateFrom: number;
 	dateTill: number;
 	announceTimes: string[];
@@ -9,9 +12,12 @@ export type AppData = {
 
 export const defaultAppData: AppData = {
 	isAnnounceEnabled: false,
-	announceVolume: 0.5,
+	isTextToSpeech: false,
 	announceText: '',
+	announceVolume: 0.5,
 	dateFrom: 0,
 	dateTill: 0,
 	announceTimes: []
 };
+
+export type ToneModule = typeof ToneNS;

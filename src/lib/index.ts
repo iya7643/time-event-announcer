@@ -19,11 +19,12 @@ import {
 	dateFrom,
 	dateTill,
 	isAnnounceEnabled,
+	isTextToSpeech
 } from '$lib/stores';
 import { API_KEY, API_POINT_URL, API_URL, CACHE_KEY, LOCAL_STORAGE_KEY } from '$lib/constants';
 import { putDataToDb } from '$lib/IndexedDbHelper';
-import { loadVoiceFromIdb } from '$lib/audio';
 import { loadAppData, updateAppData } from '$lib/localStorageHelper';
+import { prepareVoiceFromDb } from '$lib/audio';
 
 /** ロード中 */
 export let isLoading = writable<Record<string, boolean>>({
@@ -123,8 +124,9 @@ export const fetchVoiceVoxApiPoint = async (): Promise<void> => {
 export const restoreUiFromAppData = () => {
 	const appData = loadAppData();
 	isAnnounceEnabled.set(appData.isAnnounceEnabled);
-	announceVolume.set(appData.announceVolume);
+	isTextToSpeech.set(appData.isTextToSpeech);
 	announceText.set(appData.announceText);
+	announceVolume.set(appData.announceVolume);
 	dateFrom.set(appData.dateFrom);
 	dateTill.set(appData.dateTill);
 	announceTimes.set(appData.announceTimes);
@@ -140,11 +142,12 @@ export const fetchAndSaveVoice = async (): Promise<void> => {
 	const prevAppData = JSON.parse(
 		localStorage.getItem(LOCAL_STORAGE_KEY) ?? JSON.stringify(defaultAppData)
 	) as AppData;
-	const currAnnounceTest = get(announceText);
+	const currAnnounceText = get(announceText)?.trim() ?? '';
 
 	// アナウンステキストが変わっていない場合、何もしません。。
-	if (prevAppData.announceText === currAnnounceTest) {
-		await new Promise(resolve => setTimeout(resolve, 1000));
+	if (prevAppData.announceText === currAnnounceText) {
+		await new Promise(resolve => setTimeout(resolve, 500));
+		await prepareVoiceFromDb();
 		isLoading.update(curr => ({ ...curr, ['announceText']: false }));
 		return;
 	}
@@ -153,15 +156,15 @@ export const fetchAndSaveVoice = async (): Promise<void> => {
 		const params = new URLSearchParams({
 			key: API_KEY,
 			speaker: '1',
-			text: currAnnounceTest
+			text: currAnnounceText
 		});
 		const res = await fetch(`${API_URL}?${params.toString()}`);
 		if (!res.ok) throw new Error('アナウンス音声の取得に失敗しました。');
 
 		const blob = await res.blob();
 		await putDataToDb(CACHE_KEY, blob);
-		updateAppData({ announceText: currAnnounceTest });
-		await loadVoiceFromIdb();
+		updateAppData({ announceText: currAnnounceText });
+		await prepareVoiceFromDb();
 	} catch (e) {
 		const msg = e instanceof Error ? e.message : `エラーが発生しました。\n${String(e)}`;
 		alert(msg);
