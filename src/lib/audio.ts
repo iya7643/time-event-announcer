@@ -1,113 +1,126 @@
-import { browser } from '$app/environment';
-import { announceVolume } from '$lib/stores';
-import { CACHE_KEY } from '$lib/constants';
 import { get, writable } from 'svelte/store';
 import { getDataFromDb } from '$lib/IndexedDbHelper';
+import { CACHE_KEY } from '$lib/constants';
+import { announceVolume } from '$lib/stores';
+import type { ToneModule } from '$lib/types';
+import { browser } from '$app/environment';
 
 /** アナウンス音声再生準備OK（音声ダウンロード済み） */
-export let isAudioReady = writable<boolean>(true);
+export let isAudioReady = writable<boolean>(false);
 
-export let audioContextState = writable<AudioContextState | null>(null);
+/** 音声の自動再生可能（ユーザーによるページ上の操作があった） */
+export let isAudioEnabled = writable<boolean>(false);
 
+let tonePromise: Promise<ToneModule> | null = null;
+let player: any = null;
+let gain: any = null;
+let synth: any = null;
+let objectUrl: string = '';
+let initialized = false;
+let unSubVolume: (() => void) | null = null;
 
-let audioCtx: AudioContext | null = null;
-let gainNode: GainNode | null = null;
-let audioBuffer: AudioBuffer | null = null;
+const getTone = async (): Promise<ToneModule> => {
+	if (!browser) throw new Error('Tone is browser-only');
+	
+	if (!tonePromise) tonePromise = import('tone').then((m: any) => m?.default ?? m);
+	return tonePromise;
+};
 
-const ensureAudio = () => {
+export const initAudioOnce = async () => {
+	if (!browser || initialized) return;
+	initialized = true;
+	
+	const Tone = await getTone();
+	await Tone.start();
+	
+	gain = new Tone.Gain(get(announceVolume)).toDestination();
+	player = new Tone.Player({ autostart: false }).connect(gain);
+	synth = new Tone.Synth({
+		oscillator: { type: 'triangle' },
+		envelope: { attack: 0.001, decay: 0.05, sustain: 1, release: 0.2 }
+	}).connect(gain);
+	
+	unSubVolume?.()
+	unSubVolume = announceVolume.subscribe((v) => {
+		if (gain) gain.gain.rampTo(v, 0.03);
+	});
+};
+
+export const prepareVoiceFromDb = async () => {
 	if (!browser) return;
-	if (!audioCtx) audioCtx = new AudioContext();
-	if (!gainNode && audioCtx) {
-		gainNode = audioCtx.createGain();
-		try {
-			gainNode.connect(audioCtx.destination);
-		} catch (e) {}
-	}
-};
-
-const decodeVoiceBlob = async (blob: Blob) => {
-	ensureAudio();
-	if (!audioCtx) return null;
-
-	const arr = await blob.arrayBuffer();
-	audioBuffer = await audioCtx.decodeAudioData(arr);
-	isAudioReady.set(!!audioBuffer);
-	return audioBuffer;
-};
-
-export const loadVoiceFromIdb = async () => {
+	
 	const blob = await getDataFromDb<Blob>(CACHE_KEY);
 	if (!blob) {
 		isAudioReady.set(false);
-		return null;
-	}
-	return decodeVoiceBlob(blob);
-};
-
-export const playVoice = async (isTest: boolean) => {
-	if (!audioCtx) {
-		isAudioReady.set(false);
-		if (isTest && browser) alert('アナウンス音声がありません。');
 		return;
 	}
 
-	ensureAudio();
-	if (!audioCtx || !gainNode) return;
+	if (objectUrl) {
+		URL.revokeObjectURL(objectUrl);
+		objectUrl = '';
+	}
+	objectUrl = URL.createObjectURL(blob);
 
-	if (typeof audioCtx.resume === 'function') await audioCtx.resume();
+	const Tone = await getTone();
+	isAudioReady.set(false);
+	player?.dispose();
 
-	gainNode.gain.value = get(announceVolume);
-	const src = audioCtx.createBufferSource();
-	src.buffer = audioBuffer;
-	src.connect(gainNode);
-	src.onended = () => {
-		try {
-			src.disconnect();
-		} catch (e) {}
-	};
-	src.start(0);
-};
+	const target = gain ?? new Tone.Gain(get(announceVolume)).toDestination();
+	if (!gain) gain = target;
 
-export const beep = async () => {
-	ensureAudio();
-	if (!audioCtx || !gainNode) return;
-
-	const osc = audioCtx.createOscillator();
-	const gain = audioCtx.createGain();
-
-	osc.type = 'sine';
-	osc.frequency.value = 400;
-	const volume = get(announceVolume) / 2;
-	gain.gain.value = volume === 0 ? 0 : Math.max(volume, 0.1);
-
-	const now = audioCtx.currentTime;
-	osc.connect(gain).connect(gainNode);
-	osc.start(now);
-	osc.stop(now + 0.1);
-
-	osc.onended = () => {
-		try {
-			osc.disconnect();
-			gain.disconnect();
-		} catch (e) {}
-	};
+	player = new Tone.Player({ autostart: false }).toDestination();
+	try {
+		await player.load(objectUrl);
+		isAudioReady.set(true)
+	} catch (e) {
+		console.error('Tone.Player load failed.', e);
+		isAudioReady.set(false)	}
 };
 
 export const unlockAudio = async () => {
-	ensureAudio();
-	if (!audioCtx || !gainNode) return;
-
-	try {
-		if (audioCtx.state === 'suspended') {
-			await audioCtx.resume();
-		}
-		return audioCtx.state === 'running';
-	} catch (e) {
-		return false;
-	}
+	await initAudioOnce();
+	await prepareVoiceFromDb();
+	isAudioEnabled.set(true);
 };
 
-export const getAudioContextState = (): AudioContextState | null => {
-	if (!audioCtx) return null;
-	return audioCtx.state;
+export const playAudio = () => {
+	if (!player) return;
+	player.stop(0);
+	player.start(0);
+};
+
+export const playBeep = async (note: string | number, duration: string | number, volume: number) => {
+	if (!browser || !synth) return;
+
+	const Tone = await getTone();
+	const db = Tone.gainToDb(volume);
+	synth.volume.rampTo(db, 0.03);
+
+	// synth.triggerAttackRelease("C4", "8n", now);
+	// synth.triggerAttackRelease("E4", "4n", now + 0.5);
+	// synth.triggerAttackRelease("G4", "2n", now + 1);
+
+	synth.triggerAttackRelease(note, duration);
+};
+
+export const disposeAudio = () => {
+	player?.dispose();
+	player = null;
+
+	synth?.dispose();
+	synth = null;
+
+	gain?.dispose();
+	gain = null;
+
+	if (objectUrl) {
+		URL.revokeObjectURL(objectUrl);
+		objectUrl = '';
+	}
+
+	unSubVolume?.();
+	unSubVolume = null;
+	initialized = false;
+	isAudioReady.set(false);
+	isAudioEnabled.set(false);
 };

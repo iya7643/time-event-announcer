@@ -3,6 +3,9 @@ import { writable } from 'svelte/store';
 /** アナウンス音声再生許可 */
 export let isAnnounceEnabled = writable<boolean>(false);
 
+/** アラーム音（電子音/テキスト読み上げ） */
+export let isTextToSpeech = writable<boolean>(false);
+
 /** アナウンス音声テキスト */
 export let announceText = writable<string>('');
 

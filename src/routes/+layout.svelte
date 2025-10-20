@@ -7,7 +7,6 @@
 
 	import Header from '$lib/components/Header.svelte';
 	import Notification from '$lib/components/Notification.svelte';
-	import VolumeControl from '$lib/components/VolumeControl.svelte';
 	import { APP_NAME } from '$lib/constants';
 
 	let { children } = $props();

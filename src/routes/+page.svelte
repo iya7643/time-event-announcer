@@ -4,31 +4,30 @@
 	import { DatePicker } from '@svelte-plugins/datepicker';
 	import { format } from 'date-fns';
 	import {
-		announceText,
-		announceTimes,
-		announceVolume,
-		apiPoint,
-		dateFrom,
-		dateTill,
+		announceText, announceTimes, announceVolume, apiPoint, dateFrom, dateTill, isTextToSpeech
 	} from '$lib/stores';
-	import { isLoading, fetchAndSaveVoice, fetchVoiceVoxApiPoint, onBlurAnnounceTime, onChangeAnnounceDays,
+	import {
+		isLoading, fetchAndSaveVoice, fetchVoiceVoxApiPoint, onBlurAnnounceTime, onChangeAnnounceDays,
 		onChangeAnnounceTime, restoreUiFromAppData
 	} from '$lib';
-	import { isAudioReady, loadVoiceFromIdb, playVoice } from '$lib/audio';
+	import { disposeAudio, isAudioReady, playAudio, playBeep, prepareVoiceFromDb } from '$lib/audio';
 	import { clockTimerStopped, nowTime, startClockAligned, today } from '$lib/clock';
 	import { updateAppData } from '$lib/localStorageHelper';
 
 	onMount(async () => {
 		if (!browser) return;
 
+		await prepareVoiceFromDb();
+
 		restoreUiFromAppData();
-		await loadVoiceFromIdb();
+
 		startClockAligned();
 		await fetchVoiceVoxApiPoint();
 	});
 
 	onDestroy(() => {
 		clockTimerStopped.set(true);
+		disposeAudio();
 	});
 
 	let isOpen = false;
@@ -48,7 +47,24 @@
 	<section class="pt-4">
 		<div class="card">
 			<div class="card-content">
-				<!-- region # アナウンス音声 -->
+				<!-- region # 電子音/音声 -->
+				<div class="field">
+					<p class="label">アラーム音</p>
+					<div class="control">
+						<label class="switch is-rounded">
+							<span class="control-label pl-0 pr-2">電子音</span>
+							<input type="checkbox" value="1"
+										 bind:checked={$isTextToSpeech}
+										 on:change={() => updateAppData({ isTextToSpeech: $isTextToSpeech })}
+							/>
+							<span class="check is-info"></span>
+							<span class="control-label">テキスト読み上げ</span>
+						</label>
+					</div>
+				</div>
+				<!-- endregion -->
+
+				<!-- region # 音声 -->
 				<div class="field">
 					<p class="label">
 						音声
@@ -57,11 +73,12 @@
 					<div class="field has-addons mb-0">
 						<div class="control is-expanded">
 							<input class="input" type="text" placeholder="再生する音声を入力してください。"
+										 disabled={!$isTextToSpeech}
 										 bind:value={$announceText}
 							>
 						</div>
 						<div class="control">
-							<button class="button is-link" disabled={$isLoading.announceText}
+							<button class="button is-link" disabled={$isLoading.announceText || !$isTextToSpeech}
 											on:click={() => fetchAndSaveVoice()}
 							>
 								<i class="fa-solid mr-2"
@@ -99,7 +116,7 @@
 						</div>
 						<div class="control">
 							<button class="button is-link h-100" disabled={!$isAudioReady} aria-label="test playback"
-											on:click={() => playVoice(true)}
+											on:click={() => $isTextToSpeech ? playAudio() : playBeep(660, 1, $announceVolume)}
 							>
 								<i class="fas fa-play"></i>
 							</button>
