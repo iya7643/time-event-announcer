@@ -88,7 +88,8 @@
 					<div class="field has-addons">
 						<div class="control is-expanded">
 							<div class="px-4"
-									 style="border: thin solid var(--bulma-input-border-color); border-radius: var(--bulma-input-radius);">
+									 style="border: thin solid var(--bulma-input-border-color); border-radius: var(--bulma-input-radius) 0 0 var(--bulma-input-radius);"
+							>
 								<input type="range" min="0" max="1" step="0.01" class="input"
 											 style="appearance: auto;"
 											 bind:value={$announceVolume}

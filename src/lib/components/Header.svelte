@@ -4,9 +4,8 @@
 	import { updateAppData } from '$lib/localStorageHelper';
 </script>
 
-<nav class="navbar is-fixed-top has-background-black-ter">
-	<div
-		class="navbar-brand is-flex is-justify-content-space-between is-align-items-center w-100 px-3"
+<nav class="navbar is-fixed-top" style="border-bottom: thin solid darkgray;">
+	<div class="navbar-brand is-flex is-justify-content-space-between is-align-items-center w-100 px-3"
 	>
 		<p class="title is-4 pt-3 mb-1">
 			{APP_NAME}
