@@ -1,14 +1,12 @@
 <script lang="ts">
-	import { isAudioEnabled, isAudioReady, unlockAudio } from '$lib/audio';
-	import { isTextToSpeech } from '$lib/stores';
+	import { isAudioEnabled, unlockAudio } from '$lib/audio';
 </script>
 
-{#if (!$isAudioReady && $isTextToSpeech) || !$isAudioEnabled}
+{#if !$isAudioEnabled}
 	<div
 		class="notification is-light is-position-fixed px-4 py-3 mx-3"
-		class:is-danger={!$isAudioReady && $isTextToSpeech}
 		class:is-info={!$isAudioEnabled}
-		style="top: 2.5rem; right: 0rem; max-width: 95%; z-index: 100;"
+		style="top: 3rem; right: 0rem; max-width: 95%; z-index: 100;"
 	>
 		<div class="columns is-mobile">
 			<div class="column is-2">
@@ -17,9 +15,7 @@
 				</div>
 			</div>
 			<div class="column">
-				{#if !$isAudioReady && $isTextToSpeech}
-					<p>アナウンス音声が保存されていません。</p>
-				{:else if !$isAudioEnabled}
+				{#if !$isAudioEnabled}
 					<p>ブラウザの制限により自動再生できません。</p>
 					<p>
 						<button type="button" class="button is-dark is-small px-2" aria-label="allow audio playback"

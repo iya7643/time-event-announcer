@@ -1,7 +1,7 @@
 import { DB_NAME, STORE_NAME } from '$lib/constants';
 
 /** IndexedDBを開きます。 */
-export const openDb = () =>
+const openDb = () =>
 	new Promise<IDBDatabase>((resolve, reject) => {
 		const req = indexedDB.open(DB_NAME, 1);
 		req.onupgradeneeded = () => {
@@ -32,4 +32,20 @@ export const getDataFromDb = async <T = unknown>(key: string) => {
 		req.onsuccess = () => resolve((req.result as T) ?? null);
 		req.onerror = () => reject(req.error);
 	});
+};
+
+/** IndexedDBからデータを削除します。 */
+export const deleteDataFromDb = async (key: string) => {
+	const db = await openDb();
+	return new Promise<void>((resolve, reject) => {
+		const tx = db.transaction(STORE_NAME, 'readwrite');
+		const req = tx.objectStore(STORE_NAME).delete(key);
+		req.onsuccess = () => resolve();
+		req.onerror = () => reject(req.error);
+	})
+};
+
+/** IndexedDBを削除します。 */
+export const deleteDb = () => {
+	indexedDB.deleteDatabase(DB_NAME);
 };

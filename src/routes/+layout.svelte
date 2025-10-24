@@ -6,7 +6,6 @@
 	import '@fortawesome/fontawesome-free/css/all.min.css';
 
 	import Header from '$lib/components/Header.svelte';
-	import Notification from '$lib/components/Notification.svelte';
 	import { APP_NAME } from '$lib/constants';
 
 	let { children } = $props();
@@ -24,5 +23,3 @@
 <main class="pt-6">
 	{@render children?.()}
 </main>
-
-<Notification />

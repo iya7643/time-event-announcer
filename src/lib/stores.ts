@@ -1,24 +1,18 @@
 import { writable } from 'svelte/store';
+import type { AnnounceTime } from '$lib/types';
 
 /** アナウンス音声再生許可 */
 export let isAnnounceEnabled = writable<boolean>(false);
 
-/** アラーム音（電子音/テキスト読み上げ） */
-export let isTextToSpeech = writable<boolean>(false);
-
-/** アナウンス音声テキスト */
-export let announceText = writable<string>('');
-
-/** VOICEVOX残りAPIポイント */
-export let apiPoint = writable<string>('0');
+/** アナウンス音声ボリューム */
+export let announceVolume = writable<number>(0.5);
 
 /** 期間 */
 export let dateFrom = writable<number>(0);
 export let dateTill = writable<number>(0);
 
 /** 時刻 */
-export let announceTimes = writable<string[]>(Array(16).fill(''));
-export let announceTimestamps = writable<number[]>([]);
+export let announceTimes = writable<AnnounceTime[]>([]);
 
-/** アナウンス音声ボリューム */
-export let announceVolume = writable<number>(0.5);
+/** 音声データ情報: { キー: 読み上げるテキスト } */
+export let audios = writable<Record<string, string>>({});
