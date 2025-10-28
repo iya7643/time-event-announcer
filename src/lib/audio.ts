@@ -14,7 +14,7 @@ let tonePromise: Promise<ToneModule> | null = null;
 let player: any = null;
 let gain: any = null;
 let synth: any = null;
-let initialized = false;
+let initP: Promise<void> | null = null;
 let unSubVolume: (() => void) | null = null;
 
 const bufferCache = new Map<string, any>();
@@ -29,23 +29,28 @@ const getTone = async (): Promise<ToneModule> => {
 };
 
 export const initAudioOnce = async () => {
-	if (!browser || initialized) return;
+	if (!browser) return;
+	if (synth && player && gain) return;
 
-	initialized = true;
-	const Tone = await getTone();
-	await Tone.start();
-	
-	gain = new Tone.Gain(get(announceVolume)).toDestination();
-	player = new Tone.Player({ autostart: false }).connect(gain);
-	synth = new Tone.Synth({
-		oscillator: { type: 'triangle' },
-		envelope: { attack: 0.001, decay: 0.05, sustain: 1, release: 0.2 }
-	}).connect(gain);
-	
-	unSubVolume?.()
-	unSubVolume = announceVolume.subscribe((v) => {
-		if (gain) gain.gain.rampTo(v, 0.03);
-	});
+	initP = (async () => {
+		const Tone = await getTone();
+		try { await Tone.start(); } catch(e) {}
+
+		gain ??= new Tone.Gain(get(announceVolume)).toDestination();
+		player ??= new Tone.Player({ autostart: false }).connect(gain);
+		synth ??= new Tone.Synth({
+			oscillator: { type: 'triangle' },
+			envelope: { attack: 0.001, decay: 0.05, sustain: 1, release: 0.2 }
+		}).connect(gain);
+
+		if (!unSubVolume) {
+			unSubVolume = announceVolume.subscribe((v) => {
+				if (gain) gain.gain.rampTo(v, 0.03);
+			});
+		}
+	})();
+
+	try { await initP; } finally { initP = null }
 };
 
 const getAudioBuffer = async (id: string) => {

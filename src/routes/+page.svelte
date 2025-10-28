@@ -25,7 +25,8 @@
 		clockTimerStopped.set(false);
 		startClockAligned();
 
-		window.addEventListener('keydown', handleAltDel);
+		// Note: タブレットだと実行できないのでコメントアウト
+		// window.addEventListener('keydown', handleAltDel);
 	};
 
 	const destroy = () => {
@@ -33,7 +34,7 @@
 
 		clockTimerStopped.set(true);
 		disposeAudio();
-		window.removeEventListener('keydown', handleAltDel);
+		// window.removeEventListener('keydown', handleAltDel);
 	};
 
 	onMount(() => mount());
