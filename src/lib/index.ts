@@ -121,18 +121,27 @@ export const onChangeAnnounceAudio = (e: Event, no: number) => {
  * Alt + Delete でLocalStorageとIndexedDBを削除します。
  * @param {KeyboardEvent} ev
  */
-export const handleAltDel = (ev: KeyboardEvent) => {
-	if (ev.repeat) return;
-
-	const target = ev.target as HTMLElement;
-	const tagName = target.tagName;
-	const isEditable = target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(tagName);
-	if (ev.altKey && ev.key === 'Delete' && !isEditable) {
-		ev.preventDefault();
+export const handleAltDel = (ev: KeyboardEvent | null) => {
+	const initConfig = () => {
 		if (confirm('初期化してよろしいですか？')) {
 			deleteLocalStorage();
 			deleteDb();
 			location.reload();
 		}
+	};
+
+	if(ev) {
+		if (ev.repeat) return;
+
+		const target = ev.target as HTMLElement;
+		const tagName = target.tagName;
+		const isEditable = target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(tagName);
+		if (ev.altKey && ev.key === 'Delete' && !isEditable) {
+			ev.preventDefault();
+			initConfig();
+		}
+		return;
 	}
+
+	initConfig();
 };

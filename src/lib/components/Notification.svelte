@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { isAudioEnabled, unlockAudio } from '$lib/audio';
+	import { handleAltDel } from '$lib';
 </script>
 
 {#if !$isAudioEnabled}
@@ -24,6 +25,16 @@
 							<i class="fa-solid fa-volume-high"></i>
 						</button>
 						をクリックして自動再生を許可してください。
+					</p>
+					<p class="has-text-right">
+						<button class="button is-danger is-light is-small"
+										on:click={() => handleAltDel(null)}
+						>
+							<span class="icon is-small">
+								<i class="fas fa-exclamation"></i>
+							</span>
+							<span>初期化</span>
+						</button>
 					</p>
 				{/if}
 			</div>
