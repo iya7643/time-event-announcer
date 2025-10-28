@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
+	import { base } from '$app/paths';
 	import { browser } from '$app/environment';
 	import { DatePicker } from '@svelte-plugins/datepicker';
 	import { format } from 'date-fns';
@@ -136,7 +137,7 @@
 								</div>
 								<div class="column is-7-mobile is-8-tablet">
 									<p class="label">
-										<a href="/tts_manager">アナウンス音</a>
+										<a href="{base}/tts_manager">アナウンス音</a>
 									</p>
 								</div>
 							</div>
