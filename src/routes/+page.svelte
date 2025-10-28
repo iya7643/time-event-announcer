@@ -3,37 +3,47 @@
 	import { browser } from '$app/environment';
 	import { DatePicker } from '@svelte-plugins/datepicker';
 	import { format } from 'date-fns';
+	import { announceTimes, announceVolume, dateFrom, dateTill, audios } from '$lib/stores';
 	import {
-		announceText, announceTimes, announceVolume, apiPoint, dateFrom, dateTill, isTextToSpeech
-	} from '$lib/stores';
-	import {
-		isLoading, fetchAndSaveVoice, fetchVoiceVoxApiPoint, onBlurAnnounceTime, onChangeAnnounceDays,
+		handleAltDel,
+		isLoading, onBlurAnnounceTime, onChangeAnnounceAudio, onChangeAnnounceDays,
 		onChangeAnnounceTime, restoreUiFromAppData
 	} from '$lib';
-	import { disposeAudio, isAudioReady, playAudio, playBeep, prepareVoiceFromDb } from '$lib/audio';
+	import { disposeAudio } from '$lib/audio';
 	import { clockTimerStopped, nowTime, startClockAligned, today } from '$lib/clock';
-	import { updateAppData } from '$lib/localStorageHelper';
+	import Notification from '$lib/components/Notification.svelte';
+	import { loadAppData, saveAppData, updateAppData } from '$lib/localStorageHelper';
 
-	onMount(async () => {
+	const mount = () => {
 		if (!browser) return;
 
-		await prepareVoiceFromDb();
+		const [isInit, appData] = loadAppData();
+		restoreUiFromAppData(appData);
+		if (isInit) saveAppData(appData);
 
-		restoreUiFromAppData();
-
+		clockTimerStopped.set(false);
 		startClockAligned();
-		await fetchVoiceVoxApiPoint();
-	});
 
-	onDestroy(() => {
+		window.addEventListener('keydown', handleAltDel);
+	};
+
+	const destroy = () => {
+		if (!browser) return;
+
 		clockTimerStopped.set(true);
 		disposeAudio();
-	});
+		window.removeEventListener('keydown', handleAltDel);
+	};
+
+	onMount(() => mount());
+	onDestroy(() => destroy());
 
 	let isOpen = false;
 	$: formattedDateFrom = !$dateFrom ? '' : format(new Date($dateFrom), 'yyyy/MM/dd');
 	$: formattedDateTill = !$dateTill ? '' : format(new Date($dateTill), 'yyyy/MM/dd');
 </script>
+
+<Notification />
 
 <div class="container is-max-tablet">
 	<!-- region # 時計 -->
@@ -44,131 +54,70 @@
 	<!-- endregion -->
 
 	<!-- region # 設定 -->
-	<section class="pt-4">
+	<section class="pt-4 mb-6">
 		<div class="card">
 			<div class="card-content">
-				<!-- region # 電子音/音声 -->
-				<div class="field">
-					<p class="label">アラーム音</p>
-					<div class="control">
-						<label class="switch is-rounded">
-							<span class="control-label pl-0 pr-2">電子音</span>
-							<input type="checkbox" value="1"
-										 bind:checked={$isTextToSpeech}
-										 on:change={() => updateAppData({ isTextToSpeech: $isTextToSpeech })}
-							/>
-							<span class="check is-info"></span>
-							<span class="control-label">テキスト読み上げ</span>
-						</label>
-					</div>
-				</div>
-				<!-- endregion -->
-
-				<!-- region # 音声 -->
-				<div class="field">
-					<p class="label">
-						音声
-						<span class="is-size-7 has-text-weight-normal">（VOICEVOX: ずんだもん）</span>
-					</p>
-					<div class="field has-addons mb-0">
-						<div class="control is-expanded">
-							<input class="input" type="text" placeholder="再生する音声を入力してください。"
-										 disabled={!$isTextToSpeech}
-										 bind:value={$announceText}
-							>
-						</div>
-						<div class="control">
-							<button class="button is-link" disabled={$isLoading.announceText || !$isTextToSpeech}
-											on:click={() => fetchAndSaveVoice()}
-							>
-								<i class="fa-solid mr-2"
-									 class:fa-save={!$isLoading.announceText}
-									 class:fa-spinner={$isLoading.announceText}
-									 class:fa-spin={$isLoading.announceText}
-								></i>
-								保存
-							</button>
-						</div>
-					</div>
-					<p class="help">
-						残りAPIポイント:
-						<span>{$apiPoint.toLocaleString()}</span>
-					</p>
-				</div>
-				<!-- endregion -->
-
-				<!-- region # 音量 -->
-				<div class="field">
-					<p class="label">
-						音量<span class="has-text-weight-normal">（{Math.round($announceVolume * 100)}%）</span>
-					</p>
-					<div class="field has-addons">
-						<div class="control is-expanded">
-							<div class="px-4"
-									 style="border: thin solid var(--bulma-input-border-color); border-radius: var(--bulma-input-radius) 0 0 var(--bulma-input-radius);"
-							>
-								<input type="range" min="0" max="1" step="0.01" class="input"
-											 style="appearance: auto;"
-											 bind:value={$announceVolume}
-											 on:change={() => updateAppData({ announceVolume: $announceVolume })}
-								/>
-							</div>
-						</div>
-						<div class="control">
-							<button class="button is-link h-100" disabled={!$isAudioReady} aria-label="test playback"
-											on:click={() => $isTextToSpeech ? playAudio() : playBeep(660, 1, $announceVolume)}
-							>
-								<i class="fas fa-play"></i>
-							</button>
-						</div>
-					</div>
-				</div>
-				<!-- endregion -->
-
 				<!-- region # 期間 -->
-				<div class="field pt-5">
+				<div class="field">
 					<DatePicker bind:isOpen bind:startDate={$dateFrom} bind:endDate={$dateTill}
 											isRange={true} isMultipane={true} enableFutureDates={true}
 											onDateChange={() => onChangeAnnounceDays()}
 					/>
 					<p class="label">期間</p>
-					<div class="field is-horizontal">
-						<div class="field-body">
-							<!-- region # 期間（FROM） -->
-							<div class="field">
-								<div class="control has-icons-right">
-									<input type="text" class="input" value={formattedDateFrom} readonly
-												 on:click={() => (isOpen = !isOpen)}
-									/>
-									{#if $isLoading.datePeriod}
+					<div class="columns is-mobile">
+						<!-- region # 期間（FROM） -->
+						<div class="column">
+							<div class="control has-icons-right">
+								<input type="text" class="input" value={formattedDateFrom} readonly
+											 on:click={() => (isOpen = !isOpen)}
+								/>
+								{#if $isLoading.datePeriod}
 										<span class="icon is-small is-right">
 											<i class="fas fa-spinner fa-spin"></i>
 										</span>
-									{/if}
-								</div>
+								{/if}
 							</div>
-							<!-- endregion -->
-							<!-- region # 期間（～） -->
-							<div class="field">
-								<p class="title is-5 is-flex is-justify-content-center is-align-items-center h-100">
-									～
-								</p>
-							</div>
-							<!-- endregion -->
-							<!-- region # 期間（TILL） -->
-							<div class="field">
-								<div class="control has-icons-right">
-									<input type="text" class="input" value={formattedDateTill} readonly
-												 on:click={() => (isOpen = !isOpen)}
-									/>
-									{#if $isLoading.datePeriod}
+						</div>
+						<!-- endregion -->
+
+						<!-- region # 期間（～） -->
+						<div class="column is-2-mobile is-1-tablet">
+							<p class="title is-5 is-flex is-justify-content-center is-align-items-center h-100">
+								～
+							</p>
+						</div>
+						<!-- endregion -->
+
+						<!-- region # 期間（TILL） -->
+						<div class="column">
+							<div class="control has-icons-right">
+								<input type="text" class="input" value={formattedDateTill} readonly
+											 on:click={() => (isOpen = !isOpen)}
+								/>
+								{#if $isLoading.datePeriod}
 										<span class="icon is-small is-right">
 											<i class="fas fa-spinner fa-spin"></i>
 										</span>
-									{/if}
-								</div>
+								{/if}
 							</div>
-							<!-- endregion -->
+						</div>
+						<!-- endregion -->
+					</div>
+				</div>
+				<!-- endregion -->
+
+				<!-- region # 音量 -->
+				<div class="field pt-4">
+					<p class="label mb-0">
+						音量<span class="has-text-weight-normal">（{Math.round($announceVolume * 100)}%）</span>
+					</p>
+					<div class="control is-expanded">
+						<div class="px-4">
+							<input type="range" min="0" max="1" step="0.01" class="input"
+										 style="appearance: auto;"
+										 bind:value={$announceVolume}
+										 on:change={() => updateAppData({ announceVolume: $announceVolume })}
+							/>
 						</div>
 					</div>
 				</div>
@@ -176,24 +125,54 @@
 
 				<!-- region # 時刻-->
 				<div class="field">
-					<p class="label">時刻</p>
-					<div class="grid">
-						{#each Array(16) as _, i}
-							<div class="cell">
+					{#each $announceTimes as announceTime, i}
+						{#if (i === 0)}
+							<div class="columns is-mobile">
+								<div class="column is-1-mobile is-flex is-justify-content-right is-align-items-center">
+									<p class="label">No</p>
+								</div>
+								<div class="column is-4-mobile is-3-tablet">
+									<p class="label">時刻</p>
+								</div>
+								<div class="column is-7-mobile is-8-tablet">
+									<p class="label">
+										<a href="/tts_manager">アナウンス音</a>
+									</p>
+								</div>
+							</div>
+						{/if}
+						<div class="columns is-mobile">
+							<div class="column is-1-mobile is-flex is-justify-content-right is-align-items-center">
+								<p>{(i + 1)}</p>
+							</div>
+							<div class="column is-4-mobile is-3-tablet">
 								<div class="control has-icons-right">
-									<input class="input" type="time" step="1" value={$announceTimes[i]}
+									<input class="input" type="time" step="1" value={announceTime.time}
 												 on:change={(e) => onChangeAnnounceTime(e, i)}
 												 on:blur={(e) => onBlurAnnounceTime(e)}
 									/>
 									{#if $isLoading[`announceTimes_${i}`]}
-										<span class="icon is-small is-right has-text-light">
-											<i class="fas fa-spinner fa-spin"></i>
-										</span>
+											<span class="icon is-small is-right has-text-light">
+												<i class="fas fa-spinner fa-spin"></i>
+											</span>
 									{/if}
 								</div>
 							</div>
-						{/each}
-					</div>
+							<div class="column is-7-mobile is-8-tablet">
+								<div class="select w-100">
+									<select class="w-100"
+													bind:value={announceTime.audioId}
+													on:change={(e) => onChangeAnnounceAudio(e, i)}
+									>
+										<option value="beep">電子音</option>
+										{#each Object.entries($audios) as [id, text]}
+											<option value={id}>{text}</option>
+										{/each}
+									</select>
+								</div>
+							</div>
+						</div>
+					{/each}
 				</div>
 				<!-- endregion -->
 			</div>

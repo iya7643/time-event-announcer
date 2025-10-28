@@ -9,22 +9,17 @@
 // const now = new Date(data.dateTime);
 
 import { get, writable } from 'svelte/store';
-import { type AppData, defaultAppData } from '$lib/types';
 import {
-	announceText,
 	announceTimes,
-	announceTimestamps,
 	announceVolume,
-	apiPoint,
 	dateFrom,
 	dateTill,
 	isAnnounceEnabled,
-	isTextToSpeech
+	audios
 } from '$lib/stores';
-import { API_KEY, API_POINT_URL, API_URL, CACHE_KEY, LOCAL_STORAGE_KEY } from '$lib/constants';
-import { putDataToDb } from '$lib/IndexedDbHelper';
-import { loadAppData, updateAppData } from '$lib/localStorageHelper';
-import { prepareVoiceFromDb } from '$lib/audio';
+import { deleteLocalStorage, updateAppData } from '$lib/localStorageHelper';
+import type { AppData } from '$lib/types';
+import { deleteDb } from '$lib/IndexedDbHelper';
 
 /** ロード中 */
 export let isLoading = writable<Record<string, boolean>>({
@@ -33,7 +28,19 @@ export let isLoading = writable<Record<string, boolean>>({
 });
 
 /**
- *
+ * AppDataを取得してDOMへ反映します。
+ */
+export const restoreUiFromAppData = (appData: AppData) => {
+	isAnnounceEnabled.set(appData.isAnnounceEnabled);
+	announceVolume.set(appData.announceVolume);
+	dateFrom.set(appData.dateFrom);
+	dateTill.set(appData.dateTill);
+	announceTimes.set(appData.announceTimes);
+	audios.set(appData.audios);
+};
+
+/**
+ * ローディング中ステータスを更新します。
  * @param {string} key
  * @param {boolean} value
  */
@@ -56,34 +63,28 @@ export const onChangeAnnounceDays = () => {
 /**
  * アナウンス時刻を更新します。
  * @param {Event} e
- * @param {number} i
+ * @param {number} no
  */
-export const onChangeAnnounceTime = (e: Event, i: number) => {
-	updateIsLoading(`announceTimes_${i}`, true);
-	setTimeout(() => updateIsLoading(`announceTimes_${i}`, false), 500)
+export const onChangeAnnounceTime = (e: Event, no: number) => {
+	updateIsLoading(`announceTimes_${no}`, true);
+	setTimeout(() => updateIsLoading(`announceTimes_${no}`, false), 500)
 
-	const target = e.currentTarget as HTMLInputElement;
+	const timeDom = e.currentTarget as HTMLInputElement;
+	const time = timeDom.value;
+	const [hh, mm, ss] = time.split(':').map(Number);
+	const timestamp = [hh, mm, ss].every((n) => !isNaN(n))
+		? new Date().setHours(hh, mm, ss, 0)
+		: 0;
+
 	announceTimes.update((arr) => {
-		arr[i] = target.value;
-		return [...arr];
+		// 対応するnoを持つ要素を探して更新
+		return arr.map((item) =>
+			item.no === no ? { ...item, time: time, timestamp: timestamp } : item
+		);
 	});
 
 	const currAnnounceTimes = get(announceTimes);
 	updateAppData({ announceTimes: currAnnounceTimes });
-
-	// 時刻を本日のタイムスタンプへ変換してwritableな変数へセットします。
-	const timestamps: number[] = [];
-	for (const t of currAnnounceTimes) {
-		if(!t) continue;
-
-		const m = t.match(/^(\d{2}):(\d{2}):(\d{2})$/);
-		if (!m) continue;
-		const [, hh, mm, ss] = m.map(Number);
-		const d = new Date();
-		d.setHours(hh, mm, ss, 0);
-		timestamps.push(d.getTime());
-	}
-	announceTimestamps.set(timestamps);
 };
 
 /**
@@ -91,84 +92,47 @@ export const onChangeAnnounceTime = (e: Event, i: number) => {
  * @param {Event} e
  */
 export const onBlurAnnounceTime = (e: Event) => {
-	const target = e.currentTarget as HTMLInputElement;
-	const m = target.value.match(/^(\d{2}):(\d{2}):(\d{2})$/);
+	const timeDom = e.currentTarget as HTMLInputElement;
+	const m = timeDom.value.match(/^(\d{2}):(\d{2}):(\d{2})$/);
 	if (!m) {
-		target.value = '';
+		timeDom.value = '';
 	}
 };
 
 /**
- * APIポイントを取得してDOMへセットします。
- * @returns {Promise<void>}
+ * アナウンス音を更新します。
+ * @param {Event} e
+ * @param {number} no
  */
-export const fetchVoiceVoxApiPoint = async (): Promise<void> => {
-	try {
-		const params = new URLSearchParams({
-			key: API_KEY
-		});
-		const res = await fetch(`${API_POINT_URL}?${params.toString()}`);
-		if (!res.ok) throw new Error('残りAPIポイントの取得に失敗しました。');
+export const onChangeAnnounceAudio = (e: Event, no: number) => {
+	const audioDom = e.currentTarget as HTMLInputElement;
+	announceTimes.update((arr) => {
+		// 対応するnoを持つ要素を探して更新
+		return arr.map((item) =>
+			item.no === no ? { ...item, audioId: audioDom.value } : item
+		);
+	});
 
-		const data = await res.json();
-		apiPoint.set(data.points);
-	} catch (e) {
-		const msg = e instanceof Error ? e.message : `エラーが発生しました。\n${String(e)}`;
-		console.log(msg);
-	}
+	const currAnnounceTimes = get(announceTimes);
+	updateAppData({ announceTimes: currAnnounceTimes });
 };
 
 /**
- * AppDataを取得してDOMへ反映します。
+ * Alt + Delete でLocalStorageとIndexedDBを削除します。
+ * @param {KeyboardEvent} ev
  */
-export const restoreUiFromAppData = () => {
-	const appData = loadAppData();
-	isAnnounceEnabled.set(appData.isAnnounceEnabled);
-	isTextToSpeech.set(appData.isTextToSpeech);
-	announceText.set(appData.announceText);
-	announceVolume.set(appData.announceVolume);
-	dateFrom.set(appData.dateFrom);
-	dateTill.set(appData.dateTill);
-	announceTimes.set(appData.announceTimes);
-};
+export const handleAltDel = (ev: KeyboardEvent) => {
+	if (ev.repeat) return;
 
-/**
- * アナウンス音声をダウンロードしてアナウンステキストを保存します。
- * @returns {Promise<void>}
- */
-export const fetchAndSaveVoice = async (): Promise<void> => {
-	isLoading.update(curr => ({ ...curr, ['announceText']: true }));
-
-	const prevAppData = JSON.parse(
-		localStorage.getItem(LOCAL_STORAGE_KEY) ?? JSON.stringify(defaultAppData)
-	) as AppData;
-	const currAnnounceText = get(announceText)?.trim() ?? '';
-
-	// アナウンステキストが変わっていない場合、何もしません。。
-	if (prevAppData.announceText === currAnnounceText) {
-		await new Promise(resolve => setTimeout(resolve, 500));
-		await prepareVoiceFromDb();
-		isLoading.update(curr => ({ ...curr, ['announceText']: false }));
-		return;
-	}
-
-	try {
-		const params = new URLSearchParams({
-			key: API_KEY,
-			speaker: '1',
-			text: currAnnounceText
-		});
-		const res = await fetch(`${API_URL}?${params.toString()}`);
-		if (!res.ok) throw new Error('アナウンス音声の取得に失敗しました。');
-
-		const blob = await res.blob();
-		await putDataToDb(CACHE_KEY, blob);
-		updateAppData({ announceText: currAnnounceText });
-		await prepareVoiceFromDb();
-	} catch (e) {
-		const msg = e instanceof Error ? e.message : `エラーが発生しました。\n${String(e)}`;
-		alert(msg);
-	} finally {
-		isLoading.update(curr => ({ ...curr, ['announceText']: false }));
+	const target = ev.target as HTMLElement;
+	const tagName = target.tagName;
+	const isEditable = target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(tagName);
+	if (ev.altKey && ev.key === 'Delete' && !isEditable) {
+		ev.preventDefault();
+		if (confirm('初期化してよろしいですか？')) {
+			deleteLocalStorage();
+			deleteDb();
+			location.reload();
+		}
 	}
 };

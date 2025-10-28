@@ -2,7 +2,9 @@
   <dictionary name="project">
     <words>
       <w>onloaderror</w>
+      <w>onstop</w>
       <w>sveltekit</w>
+      <w>vcentered</w>
       <w>voicevox</w>
     </words>
   </dictionary>

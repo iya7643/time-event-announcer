@@ -1,23 +1,33 @@
 import  type * as ToneNS from 'tone';
 
+export type AnnounceTime = {
+	no: number;
+	time: string;
+	timestamp: number;
+	audioId: string;
+};
+
 export type AppData = {
 	isAnnounceEnabled: boolean;
-	isTextToSpeech: boolean;
-	announceText: string;
 	announceVolume: number;
 	dateFrom: number;
 	dateTill: number;
-	announceTimes: string[];
+	announceTimes: AnnounceTime[];
+	audios: Record<string, string>;
 };
 
 export const defaultAppData: AppData = {
 	isAnnounceEnabled: false,
-	isTextToSpeech: false,
-	announceText: '',
 	announceVolume: 0.5,
 	dateFrom: 0,
 	dateTill: 0,
-	announceTimes: []
+	announceTimes: Array.from({ length: 15}, (_, no) => ({
+		no: no,
+		time: '',
+		timestamp: 0,
+		audioId: 'beep',
+	})),
+	audios: {},
 };
 
 export type ToneModule = typeof ToneNS;
