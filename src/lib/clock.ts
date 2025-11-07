@@ -83,28 +83,25 @@ const updateClock = () => {
 
 	const volume = get(announceVolume);
 	const times = get(announceTimes);
+	const baseTodayMs = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
 	// const formattedNow = format(now, 'HH:mm:ss.SSS');
-	{
-		const matchedAnnounceTime = times.find((item) => {
-			const diff = nowMs - item.timestamp;
-			return Math.abs(diff) <= 0.2 * 1000;
-		});
 
-		if (matchedAnnounceTime) {
-			matchedAnnounceTime.audioId === 'beep' ? playBeep(523, 0.6, volume) : playAudio(matchedAnnounceTime.audioId);
+	for (const item of times) {
+		if (!item.offsetMs) continue;
+
+		const diff = nowMs - (baseTodayMs + item.offsetMs)
+		if (Math.abs(diff) <= 0.2 * 1000) {
+			// console.log(`${formattedNow}: アナウンス音再生`);
+			item.audioId === 'beep' ? playBeep(523, 0.6, volume) : playAudio(item.audioId);
 			return;
 		}
-	}
-	{
-		const shouldBeep = times.some((item) => {
-			const diff = nowMs - item.timestamp;
-			return -5.2 * 1000 <= diff && diff <= -0.2 * 1000;
-		});
-		if (shouldBeep) {
-			// console.log(`${formattedNow}: ビープ音再生`);
+
+		if (-5.2 * 1000 <= diff && diff <= -0.2 * 1000) {
+			// console.log(`${formattedNow}: 予告ビープ音再生`);
 			void playBeep(880, 0.15, volume/2);
 			return;
 		}
+
+		// console.log(`${formattedNow}: 何も再生しない`);
 	}
-	// console.log(`${formattedNow}: 何も再生しない`);
 };
