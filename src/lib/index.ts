@@ -71,15 +71,13 @@ export const onChangeAnnounceTime = (e: Event, no: number) => {
 
 	const timeDom = e.currentTarget as HTMLInputElement;
 	const time = timeDom.value;
-	const [hh, mm, ss] = time.split(':').map(Number);
-	const timestamp = [hh, mm, ss].every((n) => !isNaN(n))
-		? new Date().setHours(hh, mm, ss, 0)
-		: 0;
+	const [hh, mm, ss] = (time.split(":").map(Number) as number[])
+		.map((n) => (isNaN(n) ? 0 : n));
 
 	announceTimes.update((arr) => {
 		// 対応するnoを持つ要素を探して更新
 		return arr.map((item) =>
-			item.no === no ? { ...item, time: time, timestamp: timestamp } : item
+			item.no === no ? { ...item, time: time , offsetMs: (hh * 60 * 60 + mm * 60 + ss) * 1000} : item
 		);
 	});
 

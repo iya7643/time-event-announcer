@@ -2,8 +2,8 @@ import  type * as ToneNS from 'tone';
 
 export type AnnounceTime = {
 	no: number;
-	time: string;
-	timestamp: number;
+	time: string;	// hh:mm:ss形式の時刻
+	offsetMs: number;	// 00:00:00からのミリ秒
 	audioId: string;
 };
 
@@ -24,7 +24,7 @@ export const defaultAppData: AppData = {
 	announceTimes: Array.from({ length: 15}, (_, no) => ({
 		no: no,
 		time: '',
-		timestamp: 0,
+		offsetMs: 0,
 		audioId: 'beep',
 	})),
 	audios: {},

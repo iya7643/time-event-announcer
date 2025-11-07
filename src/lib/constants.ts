@@ -1,4 +1,4 @@
-export const APP_VERSION = '1.1.0';
+export const APP_VERSION = '1.1.1';
 export const APP_NAME = 'TimeEventAnnouncer';
 
 export const API_KEY = 'E272w1052-M68-5';
